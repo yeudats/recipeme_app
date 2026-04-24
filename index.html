@@ -923,6 +923,13 @@
         },
         false,
       );
+
+      // רישום Service Worker להתקנת האפליקציה
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("sw.js").catch(function (error) {
+          console.log("Service worker registration failed:", error);
+        });
+      }
     </script>
   </body>
 </html>
