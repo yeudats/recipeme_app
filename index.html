@@ -8,6 +8,10 @@
     />
     <title>Recipeme!</title>
     <style>
+      * {
+        -webkit-touch-callout: none; /* מבטל את תפריט הלחיצה הארוכה ב-iOS */
+        touch-action: manipulation;
+      }
       :root {
         /* צבעים עדינים יותר */
         --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
@@ -38,9 +42,12 @@
         /* display: flex; */
         user-select: none; /* מונע בחירת טקסט בכל האתר */
         -webkit-user-select: none;
+        -webkit-user-select: none; /* ספארי ודפדפני iOS */
+        -ms-user-select: none; /* אינטרנט אקספלורר / אדג' ישן */
+        user-select: none; /* כרום, פיירפוקס ואדג' חדש */
         overflow-x: hidden; /* מונע קפיצות רוחב בגלל אלמנטים שיוצאים מהמסך */
-  position: relative;
-  display: block;
+        position: relative;
+        display: block;
       }
 
       /* קונטיינר מרכזי - עם מרווחים מהצדדים ולמטה */
@@ -98,7 +105,7 @@
         margin: 0.5rem 0;
         border: 1px solid #cbd5e1;
         border-radius: 0.75rem;
-        font-size: 1rem;
+        font-size: 16px;
         background: #fff;
         box-sizing: border-box;
         outline: none;
@@ -106,6 +113,9 @@
         user-select: auto; /* מאפשר סימון טקסט בתוך אינפוטים */
         -webkit-user-select: auto;
         font-family: inherit;
+        -webkit-user-select: text;
+        -ms-user-select: text;
+        user-select: text;
       }
 
       .input:focus,
@@ -365,43 +375,43 @@
 
       /* --- תצוגות (Views) - מעברי שקיפות (Fade) --- */
       .view {
-  display: none;
-  opacity: 0;
-  width: 100%;
-  min-height: 100dvh;
-  transition: opacity 2s ease-in-out;
-  /* מרכוז אבסולוטי קשיח */
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  margin-left: auto;
-  margin-right: auto;
-  
-  flex-direction: column;
-  align-items: center;
-  pointer-events: none;
-  z-index: 1;
-}
+        display: none;
+        opacity: 0;
+        width: 100%;
+        min-height: 100dvh;
+        transition: opacity 2s ease-in-out;
+        /* מרכוז אבסולוטי קשיח */
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin-left: auto;
+        margin-right: auto;
 
-.view.active {
-  display: flex;
-  opacity: 1;
-  pointer-events: auto;
-  z-index: 2;
-  /* השארת המיקום כאבסולוטי כדי שלא יקפוץ כשנוסיף דף אחר */
-  position: relative; 
-}
+        flex-direction: column;
+        align-items: center;
+        pointer-events: none;
+        z-index: 1;
+      }
 
-/* במצב של דעיכה, אנחנו מכריחים אותו להישאר אבסולוטי מעל הכל */
-.view.fading-out {
-  display: flex;
-  opacity: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10; 
-}
+      .view.active {
+        display: flex;
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 2;
+        /* השארת המיקום כאבסולוטי כדי שלא יקפוץ כשנוסיף דף אחר */
+        position: relative;
+      }
+
+      /* במצב של דעיכה, אנחנו מכריחים אותו להישאר אבסולוטי מעל הכל */
+      .view.fading-out {
+        display: flex;
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+      }
     </style>
   </head>
   <body>
@@ -439,7 +449,7 @@
 
     <div id="view-home" class="view active">
       <img
-        src="/icon.png"
+        src="icon.png"
         class="logo-home"
         alt="Logo"
         onerror="this.style.display = 'none'"
@@ -456,7 +466,9 @@
           class="button search-button"
           onclick="
             searchRecipes(document.getElementById('search-input').value.trim());
-            setTimeout(() => {document.getElementById('search-input').value = '';}, 750);
+            setTimeout(() => {
+              document.getElementById('search-input').value = '';
+            }, 750);
           "
         >
           🔍
@@ -886,6 +898,31 @@
         // מגדירים את הגובה לפי גובה התוכן
         el.style.height = el.scrollHeight + "px";
       }
+
+      // מניעת זום על ידי צביטה (Pinch to Zoom)
+      document.addEventListener(
+        "touchstart",
+        function (event) {
+          if (event.touches.length > 1) {
+            event.preventDefault();
+          }
+        },
+        { passive: false },
+      );
+
+      // מניעת זום על ידי לחיצה כפולה
+      let lastTouchEnd = 0;
+      document.addEventListener(
+        "touchend",
+        function (event) {
+          const now = new Date().getTime();
+          if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+          }
+          lastTouchEnd = now;
+        },
+        false,
+      );
     </script>
   </body>
 </html>
