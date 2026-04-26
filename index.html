@@ -6,6 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
+    <link rel="manifest" href="manifest.json" />
     <title>Recipeme!</title>
     <style>
       * {
@@ -13,18 +14,26 @@
         touch-action: manipulation;
       }
       :root {
-        /* צבעים עדינים יותר */
-        --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-        --btn-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
-        --btn-hover-gradient: linear-gradient(135deg, #fda085 0%, #f6d365 100%);
-        --blue-accent: #3b82f6;
+        /* רקע פסטלי עדין: צהבהב שגולש לתכלת וסגול בהיר */
+        --bg-gradient: linear-gradient(
+          135deg,
+          #fef9c3 0%,
+          #e0f2fe 50%,
+          #f3e8ff 100%
+        );
+
+        /* כפתורים בצבעי ירוק-כחול רגועים במקום כתום מנקר עיניים */
+        --btn-gradient: linear-gradient(135deg, #6ee7b7 0%, #3b82f6 100%);
+        --btn-hover-gradient: linear-gradient(135deg, #3b82f6 0%, #6ee7b7 100%);
+
+        --blue-accent: #6366f1; /* סגול-כחול עדין לכותרות */
         --text-main: #334155;
         --container-bg: rgba(255, 255, 255, 0.85);
 
-        /* אינפוטים לקריאה בלבד בדף מתכון */
-        --readonly-bg: #e0f2fe;
+        /* אינפוטים לקריאה בלבד */
+        --readonly-bg: #f8fafc;
         --readonly-text: #475569;
-        --readonly-border: #bae6fd;
+        --readonly-border: #e2e8f0;
       }
 
       body {
@@ -379,15 +388,13 @@
         opacity: 0;
         width: 100%;
         min-height: 100dvh;
-        transition: opacity 2s ease-in-out;
-        /* מרכוז אבסולוטי קשיח */
+        transition: opacity 0.3s ease-out; /* הוחלף מ-2 שניות ל-0.3 */
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         margin-left: auto;
         margin-right: auto;
-
         flex-direction: column;
         align-items: center;
         pointer-events: none;
@@ -399,11 +406,9 @@
         opacity: 1;
         pointer-events: auto;
         z-index: 2;
-        /* השארת המיקום כאבסולוטי כדי שלא יקפוץ כשנוסיף דף אחר */
         position: relative;
       }
 
-      /* במצב של דעיכה, אנחנו מכריחים אותו להישאר אבסולוטי מעל הכל */
       .view.fading-out {
         display: flex;
         opacity: 0;
@@ -562,16 +567,54 @@
       const API_URL =
         "https://script.google.com/macros/s/AKfycbyg7jQ1hnPkzT-yBVJfUbluXyMToMvS06ezUNXHM985po1PyiVccNKf3oeMSDLsxdIT/exec";
 
-      // שמירת תוצאות החיפוש בזיכרון של הפרונט
+      const CACHE_KEY = "recipeme_data";
+
       let cachedRecipes = [];
       let currentRecipeName = "";
       let groceryList = [""];
 
-      /* --- ניהול היסטוריה וניווט (History API) --- */
+      /* --- ניהול הזיכרון המקומי (Local Storage) --- */
+      function loadFromCache() {
+        try {
+          const data = localStorage.getItem(CACHE_KEY);
+          if (data) cachedRecipes = JSON.parse(data);
+        } catch (e) {
+          console.error("שגיאה בקריאה מהזיכרון המקומי", e);
+        }
+      }
+
+      function saveToCache() {
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify(cachedRecipes));
+        } catch (e) {
+          console.warn("Local storage full", e);
+          showToast(
+            "אזהרה: זיכרון הדפדפן מלא. המתכון נשמר בענן אך לא יהיה זמין באופליין.",
+          );
+        }
+      }
+
+      /* --- סנכרון ברקע בעליית האתר --- */
+      async function backgroundSync() {
+        try {
+          const res = await fetch(API_URL, {
+            method: "POST",
+            body: JSON.stringify({ action: "getAllRecipes" }),
+          });
+          const result = await res.json();
+          if (result.status === "success") {
+            cachedRecipes = result.data;
+            saveToCache();
+          }
+        } catch (e) {
+          console.log("סנכרון רקע נכשל - משתמשים בנתונים הקיימים (אופליין)");
+        }
+      }
+
       window.onload = () => {
-        // אתחול ההיסטוריה לדף הבית
-        // history.replaceState({ view: "view-home" }, "", "#home");
-        // renderIngredients();
+        loadFromCache(); // 1. טעינה מיידית מהזיכרון
+        backgroundSync(); // 2. סנכרון שקט ברקע בלי לעצור את המשתמש
+
         navigateTo("view-home", true);
 
         const searchInput = document.getElementById("search-input");
@@ -579,14 +622,13 @@
           searchInput.addEventListener("keydown", (e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              searchRecipes(searchInput.value.trim());
-              document.getElementById("search-input").value = "";
+              searchRecipesLocal(searchInput.value);
+              searchInput.value = "";
             }
           });
         }
       };
 
-      // המאזין שלוחץ על ה"חזור" בפלאפון או בדפדפן
       window.onpopstate = (e) => {
         if (
           document.getElementById("delete-modal").classList.contains("active")
@@ -594,35 +636,30 @@
           closeDeleteModal();
           return;
         }
-
-        if (e.state && e.state.view) {
-          switchViewElement(e.state.view);
-        } else {
-          switchViewElement("view-home");
-        }
+        if (e.state && e.state.view) switchViewElement(e.state.view);
+        else switchViewElement("view-home");
       };
 
       function navigateTo(viewId, replace = false) {
-        if (replace) {
+        if (replace)
           history.replaceState(
             { view: viewId },
             "",
             `#${viewId.replace("view-", "")}`,
           );
-        } else {
+        else
           history.pushState(
             { view: viewId },
             "",
             `#${viewId.replace("view-", "")}`,
           );
-        }
         switchViewElement(viewId);
       }
 
       function resetAddForm() {
         document.getElementById("recipe-name").value = "";
         document.getElementById("recipe-method").value = "";
-        document.getElementById("recipe-method").style.height = "auto"; // איפוס גובה
+        document.getElementById("recipe-method").style.height = "auto";
         groceryList = [""];
         renderIngredients();
       }
@@ -631,33 +668,25 @@
         const currentView = document.querySelector(".view.active");
         const nextView = document.getElementById(viewId);
 
-        // אם יש דף שמוצג כרגע, נעלים אותו קודם
         if (currentView && currentView.id !== viewId) {
           currentView.classList.add("fading-out");
           currentView.classList.remove("active");
-
-          // מחכים 2 שניות (2000 מילישניות) לפני שמציגים את הבא
+          // מעבר מהיר יותר - 300 מילישניות
           setTimeout(() => {
             currentView.classList.remove("fading-out");
-            currentView.style.display = "none"; // מבטיח הסרה מוחלטת
-
+            currentView.style.display = "none";
             showNextView(nextView, viewId);
-          }, 750);
+          }, 300);
         } else {
-          // אם זה המעבר הראשון (טעינת דף)
           showNextView(nextView, viewId);
         }
       }
 
       function showNextView(nextView, viewId) {
         nextView.style.display = "flex";
-        // Trigger reflow כדי שהדפדפן יזהה את שינוי ה-display לפני ה-opacity
         void nextView.offsetWidth;
-
         nextView.classList.add("active");
         window.scrollTo(0, 0);
-
-        // תיקון גובה ל-textarea אם עברנו לדף מתכון
         if (viewId === "view-recipe") {
           setTimeout(
             () => autoResize(document.getElementById("display-method")),
@@ -666,7 +695,6 @@
         }
       }
 
-      /* --- פונקציות עזר --- */
       function showToast(msg) {
         const t = document.getElementById("toast");
         t.innerText = msg;
@@ -675,72 +703,58 @@
       }
 
       function createMarqueeText(text) {
-        if (text.length > 20) {
-          return `<div class="marquee-container"><span class="marquee-text">${text}</span></div>`;
-        }
-        return text;
+        return text.length > 20
+          ? `<div class="marquee-container"><span class="marquee-text">${text}</span></div>`
+          : text;
       }
 
-      /* --- תקשורת לשרת והצגת נתונים --- */
-      async function searchRecipes(query) {
-        navigateTo("view-loading", false); // מעבר לדף טעינה
+      /* --- חיפוש מקומי (מיידי) --- */
+      function searchRecipesLocal(query) {
+        const term = query.trim();
+        let results = cachedRecipes;
 
-        try {
-          const res = await fetch(API_URL, {
-            method: "POST",
-            body: JSON.stringify({ action: "getRecipes", query }),
+        if (term) {
+          results = cachedRecipes.filter((r) => r.name.includes(term));
+          // מיון לפי רלוונטיות
+          results.sort((a, b) => a.name.indexOf(term) - b.name.indexOf(term));
+        }
+
+        const list = document.getElementById("search-results");
+        list.innerHTML = "";
+
+        if (results.length === 0) {
+          list.innerHTML = "<p style='color: #64748b;'>לא נמצאו מתכונים</p>";
+        } else {
+          results.forEach((recipe) => {
+            const b = document.createElement("button");
+            b.className = "button";
+            b.innerHTML = createMarqueeText(recipe.name);
+            b.onclick = () => {
+              renderRecipeData(recipe);
+              navigateTo("view-recipe", false);
+            };
+            list.appendChild(b);
           });
-          const result = await res.json();
-
-          cachedRecipes = result.data; // שמירת כל הנתונים בזיכרון
-          const list = document.getElementById("search-results");
-          list.innerHTML = "";
-
-          if (cachedRecipes.length === 0) {
-            list.innerHTML = "<p style='color: #64748b;'>לא נמצאו מתכונים</p>";
-          } else {
-            cachedRecipes.forEach((recipe, index) => {
-              const b = document.createElement("button");
-              b.className = "button";
-              b.innerHTML = createMarqueeText(recipe.name);
-              // לחיצה טוענת מיד מהזיכרון
-              b.onclick = () => {
-                renderRecipeFromCache(index);
-                navigateTo("view-recipe", false);
-              };
-              list.appendChild(b);
-            });
-          }
-          // במקום להחליף את ההיסטוריה, נוסיף כדי שיהיה אפשר לחזור לחיפוש
-          navigateTo("view-search", true);
-        } catch (e) {
-          showToast("שגיאה בחיבור");
-          history.back(); // חזור לדף הקודם
         }
+        navigateTo("view-search", false);
       }
 
-      // טעינת מתכון ללא קריאת שרת! המידע כבר אצלנו
-      function renderRecipeFromCache(index) {
-        const recipe = cachedRecipes[index];
+      // מעטפת לכפתור החיפוש בהטמאל
+      function searchRecipes(query) {
+        searchRecipesLocal(query);
+      }
 
+      function renderRecipeData(recipe) {
         currentRecipeName = recipe.name;
-
-        // שם מתכון ככותרת עליונה
         document.getElementById("display-name").innerHTML = createMarqueeText(
           recipe.name,
         );
-
-        // מצרכים כתיבות קריאה בלבד
         document.getElementById("display-ingredients").innerHTML =
           recipe.ingredients.map((i) => `<li>${i}</li>`).join("");
-
-        // אופן הכנה
         document.getElementById("display-method").value = recipe.method;
-        // autoResize(document.getElementById("display-method"));
-
-        // navigateTo("view-recipe", false);
       }
 
+      /* --- שמירה אופטימית --- */
       async function saveRecipe() {
         const name = document.getElementById("recipe-name").value.trim();
         const method = document.getElementById("recipe-method").value.trim();
@@ -751,50 +765,37 @@
           return;
         }
 
+        const newRecipe = { name, ingredients, method };
         const saveBtn = document.getElementById("save-btn");
         saveBtn.disabled = true;
-        navigateTo("view-loading", true); // מעבר לדף טעינה
 
+        // 1. ממשק אופטימי - שמירה בזיכרון ומעבר מיידי לדף המתכון!
+        cachedRecipes.unshift(newRecipe); // מוסיף לתחילת המערך
+        saveToCache();
+
+        showToast("המתכון נשמר בהצלחה!");
+        renderRecipeData(newRecipe);
+        navigateTo("view-recipe", true);
+        saveBtn.disabled = false;
+
+        // 2. סנכרון שקט ברקע מול השרת
         try {
           const response = await fetch(API_URL, {
             method: "POST",
-            body: JSON.stringify({
-              action: "addRecipe",
-              recipe: { name, ingredients, method },
-            }),
+            body: JSON.stringify({ action: "addRecipe", recipe: newRecipe }),
           });
           const result = await response.json();
 
-          if (result.status === "success") {
-            showToast("המתכון נשמר בהצלחה!");
-
-            // שומרים את המתכון החדש לקאש המקומי כדי להציג אותו מיד
-            cachedRecipes = [{ name, ingredients, method }];
-
-            setTimeout(() => {
-              saveBtn.disabled = false;
-              // הדרישה: חזרה מדף מתכון חדש תחזיר לבית. לכן נעשה ReplaceState
-              //   history.replaceState({ view: "view-home" }, "", "#home");
-
-              //   history.pushState({ view: "view-recipe" }, "", "#recipe");
-              renderRecipeFromCache(0);
-              navigateTo("view-recipe", true);
-            }, 1000);
-          } else {
-            showToast("שגיאה מהשרת: " + result.message);
-            saveBtn.disabled = false;
-            // history.back();
-            navigateTo("view-add", true);
-          }
+          if (result.status !== "success") throw new Error(result.message);
         } catch (error) {
-          showToast("שגיאה בחיבור לשרת");
-          saveBtn.disabled = false;
-          // history.back();
-          navigateTo("view-add", true);
+          // מחיקה מהזיכרון הקאש במקרה של כישלון בשרת
+          cachedRecipes = cachedRecipes.filter((r) => r.name !== name);
+          saveToCache();
+          showToast("שגיאה בסנכרון לענן: " + (error.message || "בעיית תקשורת"));
         }
       }
 
-      /* --- טיפול במחיקה --- */
+      /* --- מחיקה אופטימית --- */
       function askDeleteRecipe() {
         document.getElementById("delete-modal").classList.add("active");
       }
@@ -805,39 +806,43 @@
 
       document.getElementById("confirm-delete-btn").onclick = async () => {
         closeDeleteModal();
-        navigateTo("view-loading", true);
 
+        const nameToDelete = currentRecipeName;
+
+        // 1. גיבוי לפני מחיקה (למקרה של שגיאה) ומחיקה מהירה
+        const recipeIndex = cachedRecipes.findIndex(
+          (r) => r.name === nameToDelete,
+        );
+        const backupRecipe = cachedRecipes[recipeIndex];
+
+        cachedRecipes.splice(recipeIndex, 1);
+        saveToCache();
+
+        showToast("המתכון נמחק");
+        navigateTo("view-home", true);
+
+        // 2. מחיקה שקטה ברקע מול השרת
         try {
           const res = await fetch(API_URL, {
             method: "POST",
             body: JSON.stringify({
               action: "deleteRecipe",
-              name: currentRecipeName,
+              name: nameToDelete,
             }),
           });
           const result = await res.json();
-
-          if (result.status === "success") {
-            showToast("המתכון נמחק");
-            setTimeout(() => {
-              // חוזרים דף אחד אחורה בהיסטוריה (אמור להיות החיפוש או הבית)
-              //   history.back();
-              navigateTo("view-home", true);
-              window.location.href = "#home";
-            }, 1000);
-          } else {
-            showToast("שגיאה: " + result.message);
-            // history.back();
-            navigateTo("view-recipe", true);
-          }
+          if (result.status !== "success") throw new Error(result.message);
         } catch (e) {
-          showToast("שגיאה בחיבור לשרת");
-          // history.back();
-          navigateTo("view-recipe", true);
+          // שחזור המתכון אם השרת סירב
+          if (backupRecipe) {
+            cachedRecipes.splice(recipeIndex, 0, backupRecipe);
+            saveToCache();
+          }
+          showToast("שגיאה במחיקה מהענן. המתכון שוחזר.");
         }
       };
 
-      /* --- ניהול רשימת המצרכים בדיוק כמו שהיה, רק ללא רינדור מחדש הורס פוקוס --- */
+      /* --- ניהול מצרכים --- */
       function renderIngredients() {
         const container = document.getElementById("ingredients-list");
         container.innerHTML = "";
@@ -870,9 +875,7 @@
           if (e.key === "Enter" || e.key === "Tab") {
             if (e.key === "Enter") e.preventDefault();
             const allInputs = container.querySelectorAll(".ing-input");
-            if (allInputs[index + 1]) {
-              allInputs[index + 1].focus();
-            }
+            if (allInputs[index + 1]) allInputs[index + 1].focus();
           }
         };
 
@@ -893,37 +896,30 @@
       }
 
       function autoResize(el) {
-        // מאפסים את הגובה כדי למדוד מחדש בצורה מדויקת (במקרה של מחיקת טקסט)
         el.style.height = "auto";
-        // מגדירים את הגובה לפי גובה התוכן
         el.style.height = el.scrollHeight + "px";
       }
 
-      // מניעת זום על ידי צביטה (Pinch to Zoom)
       document.addEventListener(
         "touchstart",
         function (event) {
-          if (event.touches.length > 1) {
-            event.preventDefault();
-          }
+          if (event.touches.length > 1) event.preventDefault();
         },
         { passive: false },
       );
 
-      // מניעת זום על ידי לחיצה כפולה
       let lastTouchEnd = 0;
       document.addEventListener(
         "touchend",
         function (event) {
           const now = new Date().getTime();
-          if (now - lastTouchEnd <= 300) {
-            event.preventDefault();
-          }
+          if (now - lastTouchEnd <= 300) event.preventDefault();
           lastTouchEnd = now;
         },
         false,
       );
     </script>
+
     <script>
       // רישום Service Worker להתקנת האפליקציה
       if ("serviceWorker" in navigator) {
