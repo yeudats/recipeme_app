@@ -170,13 +170,42 @@
       #display-ingredients li {
         margin-bottom: 0.5rem;
         padding: 0.4rem 0;
-        display: block; /* גורם לכל מצרך לתפוס שורה מלאה כמו אינפוט */
+        display: flex;
         box-sizing: border-box;
+        align-items: flex-start; /* שומר על הסכין למעלה גם אם הטקסט ארוך */
+        gap: 10px;
+        margin-bottom: 8px;
+        text-align: right;
+        line-height: 1.4;
+        word-break: keep-all; /* מעדיף לא לשבור מילים באמצע */
+        overflow-wrap: anywhere; /* אם המילה ארוכה מהשורה כולה, רק אז ישבור אותה */
       }
 
       #display-ingredients li::before {
         content: "🔪 ";
         margin-left: 8px;
+        flex-shrink: 0; /* מונע מהסכין להתכווץ כשהטקסט ארוך */
+      }
+
+      #display-method {
+        width: 100%;
+        box-sizing: border-box; /* כולל את ה-padding בתוך הרוחב */
+        resize: none;
+        overflow: hidden;
+        border: 1px solid var(--readonly-border);
+        background: var(--readonly-bg);
+        padding: 15px;
+        border-radius: 12px;
+        line-height: 1.6;
+        font-family: inherit;
+        font-size: 1rem;
+      }
+
+      #display-name {
+        max-width: 100%;
+        text-align: center;
+        overflow-wrap: break-word;
+        margin-bottom: 20px;
       }
 
       .label {
@@ -416,6 +445,14 @@
         top: 0;
         left: 0;
         z-index: 10;
+      }
+
+      .view,
+      .container,
+      .button {
+        word-wrap: break-word; /* שבירת מילים ארוכות מאוד */
+        overflow-wrap: break-word; /* תמיכה בדפדפנים מודרניים */
+        white-space: normal; /* מאפשר ירידת שורה טבעית */
       }
     </style>
   </head>
