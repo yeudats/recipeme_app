@@ -6,67 +6,51 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="apple-touch-icon" href="icon.png" />
+    
     <link rel="manifest" href="manifest.json" />
     <title>Recipeme!</title>
     <style>
       * {
-        -webkit-touch-callout: none; /* מבטל את תפריט הלחיצה הארוכה ב-iOS */
+        -webkit-touch-callout: none;
         touch-action: manipulation;
       }
       :root {
-        /* רקע פסטלי עדין: צהבהב שגולש לתכלת וסגול בהיר */
-        --bg-gradient: linear-gradient(
-          135deg,
-          #fef9c3 0%,
-          #e0f2fe 50%,
-          #f3e8ff 100%
-        );
-
-        /* כפתורים בצבעי ירוק-כחול רגועים במקום כתום מנקר עיניים */
+        --bg-gradient: linear-gradient(135deg, #fef9c3 0%, #e0f2fe 50%, #f3e8ff 100%);
         --btn-gradient: linear-gradient(135deg, #6ee7b7 0%, #3b82f6 100%);
         --btn-hover-gradient: linear-gradient(135deg, #3b82f6 0%, #6ee7b7 100%);
-
-        --blue-accent: #6366f1; /* סגול-כחול עדין לכותרות */
+        --blue-accent: #6366f1;
         --text-main: #334155;
         --container-bg: rgba(255, 255, 255, 0.85);
-
-        /* אינפוטים לקריאה בלבד */
         --readonly-bg: #f8fafc;
         --readonly-text: #475569;
         --readonly-border: #e2e8f0;
       }
 
       body {
-        font-family:
-          "Segoe UI",
-          system-ui,
-          -apple-system,
-          sans-serif;
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
         margin: 0;
         background: var(--bg-gradient);
         background-attachment: fixed;
         min-height: 100dvh;
         color: var(--text-main);
         overflow-x: hidden;
-        /* display: flex; */
-        user-select: none; /* מונע בחירת טקסט בכל האתר */
+        user-select: none;
         -webkit-user-select: none;
-        -webkit-user-select: none; /* ספארי ודפדפני iOS */
-        -ms-user-select: none; /* אינטרנט אקספלורר / אדג' ישן */
-        user-select: none; /* כרום, פיירפוקס ואדג' חדש */
-        overflow-x: hidden; /* מונע קפיצות רוחב בגלל אלמנטים שיוצאים מהמסך */
+        -ms-user-select: none;
         position: relative;
         display: block;
       }
 
-      /* קונטיינר מרכזי - עם מרווחים מהצדדים ולמטה */
       .page-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         width: 85%;
         max-width: 500px;
-        margin: 2rem auto 2rem auto; /* מרווח מלמעלה ומלמטה */
+        margin: 2rem auto 2rem auto;
         padding: 1.5rem;
         background-color: var(--container-bg);
         backdrop-filter: blur(8px);
@@ -75,10 +59,8 @@
         border: 1px solid rgba(255, 255, 255, 0.5);
         text-align: center;
         box-sizing: border-box;
-        position: relative;
       }
 
-      /* כפתורים */
       .button {
         height: 3rem;
         width: 100%;
@@ -96,7 +78,6 @@
         justify-content: center;
         text-decoration: none;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-        position: relative; /* לתיקון לחיצות */
         z-index: 10;
       }
 
@@ -106,7 +87,6 @@
         box-shadow: 0 4px 12px rgba(253, 160, 133, 0.4);
       }
 
-      /* אינפוטים */
       .input,
       .textarea {
         width: 100%;
@@ -119,35 +99,31 @@
         box-sizing: border-box;
         outline: none;
         transition: all 0.3s ease;
-        user-select: auto; /* מאפשר סימון טקסט בתוך אינפוטים */
-        -webkit-user-select: auto;
-        font-family: inherit;
-        -webkit-user-select: text;
-        -ms-user-select: text;
         user-select: text;
+        -webkit-user-select: text;
+        font-family: inherit;
       }
 
       .input:focus,
       .textarea:focus {
         border-color: var(--blue-accent);
-        background: #f0f9ff; /* הופך לתכלת עדין */
+        background: #f0f9ff;
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
       }
 
       .textarea {
         min-height: 120px;
         resize: none;
-        overflow: hidden; /* מבטל את הגלילה הפנימית */
-        transition: height 0.1s ease; /* אנימציה עדינה להגדלה */
+        overflow: hidden;
+        transition: height 0.1s ease;
         line-height: 1.5;
       }
 
-      /* אינפוטים של קריאה בלבד (דף מתכון) */
       .readonly-box {
-        background-color: var(--readonly-bg);
+        background-color: var(--readonly-bg) !important;
         color: var(--readonly-text);
         border: 1px solid var(--readonly-border);
-        pointer-events: none; /* חוסם לחיצה/פוקוס */
+        pointer-events: none;
         text-align: right;
       }
 
@@ -162,9 +138,9 @@
         width: 100%;
         padding: 0;
         margin: 0.5rem 0;
-        list-style: none; /* מבטל את הנקודות הרגילות אם תרצה */
-        text-align: right; /* מצמיד טקסט לימין */
-        direction: rtl; /* מבטיח כיוון עברית */
+        list-style: none;
+        text-align: right;
+        direction: rtl;
       }
 
       #display-ingredients li {
@@ -172,24 +148,22 @@
         padding: 0.4rem 0;
         display: flex;
         box-sizing: border-box;
-        align-items: flex-start; /* שומר על הסכין למעלה גם אם הטקסט ארוך */
+        align-items: flex-start;
         gap: 10px;
         margin-bottom: 8px;
-        text-align: right;
         line-height: 1.4;
-        word-break: keep-all; /* מעדיף לא לשבור מילים באמצע */
-        overflow-wrap: anywhere; /* אם המילה ארוכה מהשורה כולה, רק אז ישבור אותה */
+        word-break: keep-all;
+        overflow-wrap: anywhere;
       }
 
       #display-ingredients li::before {
         content: "🔪 ";
-        margin-left: 8px;
-        flex-shrink: 0; /* מונע מהסכין להתכווץ כשהטקסט ארוך */
+        flex-shrink: 0;
       }
 
       #display-method {
         width: 100%;
-        box-sizing: border-box; /* כולל את ה-padding בתוך הרוחב */
+        box-sizing: border-box;
         resize: none;
         overflow: hidden;
         border: 1px solid var(--readonly-border);
@@ -217,7 +191,6 @@
         font-size: 1.1rem;
       }
 
-      /* --- דף הבית --- */
       #view-home {
         display: flex;
         flex-direction: column;
@@ -232,9 +205,6 @@
         margin: 5dvh auto 20dvh auto;
         border-radius: 50%;
         object-fit: cover;
-        /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); */
-        /* אם אין תמונה, מציג עיגול אפור יפה כפלייסחולדר */
-        /* background-color: #e2e8f0; */
       }
 
       .search-group {
@@ -279,7 +249,6 @@
         color: var(--blue-accent);
       }
 
-      /* --- אנימציית טקסט רץ (Marquee) עם השהייה של 2 שניות --- */
       .marquee-container {
         width: calc(100% - 20px);
         overflow: hidden;
@@ -291,20 +260,14 @@
       .marquee-text {
         display: inline-block;
         animation: marquee 7s linear infinite;
-        animation-delay: 2s; /* מחכה 2 שניות לפני שמתחיל */
+        animation-delay: 2s;
       }
 
       @keyframes marquee {
-        0%,
-        10% {
-          transform: translateX(0);
-        }
-        100% {
-          transform: translateX(100%);
-        }
+        0%, 10% { transform: translateX(0); }
+        100% { transform: translateX(100%); }
       }
 
-      /* --- הודעות קופצות (Toast) --- */
       #toast {
         position: fixed;
         left: 50%;
@@ -325,7 +288,6 @@
         transform: translate(-50%, 0);
       }
 
-      /* חלון מחיקה */
       .modal-overlay {
         display: none;
         position: fixed;
@@ -359,7 +321,6 @@
         transform: scale(1);
       }
 
-      /* --- דף טעינה עם אנימציה --- */
       .loader-container {
         display: flex;
         flex-direction: column;
@@ -397,12 +358,8 @@
         transform: rotate(20deg);
       }
       @keyframes bouncePot {
-        0% {
-          transform: translateY(0);
-        }
-        100% {
-          transform: translateY(-10px);
-        }
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-10px); }
       }
       .loader-text {
         margin-top: 1.5rem;
@@ -411,13 +368,12 @@
         font-size: 1.2rem;
       }
 
-      /* --- תצוגות (Views) - מעברי שקיפות (Fade) --- */
       .view {
         display: none;
         opacity: 0;
         width: 100%;
         min-height: 100dvh;
-        transition: opacity 0.3s ease-out; /* הוחלף מ-2 שניות ל-0.3 */
+        transition: opacity 0.3s ease-out;
         position: absolute;
         top: 0;
         left: 0;
@@ -428,6 +384,9 @@
         align-items: center;
         pointer-events: none;
         z-index: 1;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
       }
 
       .view.active {
@@ -446,14 +405,6 @@
         left: 0;
         z-index: 10;
       }
-
-      .view,
-      .container,
-      .button {
-        word-wrap: break-word; /* שבירת מילים ארוכות מאוד */
-        overflow-wrap: break-word; /* תמיכה בדפדפנים מודרניים */
-        white-space: normal; /* מאפשר ירידת שורה טבעית */
-      }
     </style>
   </head>
   <body>
@@ -464,20 +415,8 @@
         <h3 style="color: #ef4444; margin-top: 0">מחיקת מתכון</h3>
         <p>האם למחוק את המתכון לצמיתות?</p>
         <div style="display: flex; gap: 15px; margin-top: 20px">
-          <button
-            class="button"
-            style="background: #ef4444"
-            id="confirm-delete-btn"
-          >
-            כן, מחק
-          </button>
-          <button
-            class="button"
-            style="background: #94a3b8"
-            onclick="closeDeleteModal()"
-          >
-            ביטול
-          </button>
+          <button class="button" style="background: #ef4444" id="confirm-delete-btn">כן, מחק</button>
+          <button class="button" style="background: #94a3b8" onclick="closeDeleteModal()">ביטול</button>
         </div>
       </div>
     </div>
@@ -490,41 +429,17 @@
     </div>
 
     <div id="view-home" class="view active">
-      <img
-        src="icon.png"
-        class="logo-home"
-        alt="Logo"
-        onerror="this.style.display = 'none'"
-      />
+      <img src="icon.png" class="logo-home" alt="Logo" onerror="this.style.display = 'none'" />
 
       <div class="search-group">
-        <input
-          type="text"
-          id="search-input"
-          class="input search-input"
-          placeholder="חפש מתכון..."
-        />
-        <button
-          class="button search-button"
-          onclick="
-            searchRecipes(document.getElementById('search-input').value.trim());
-            setTimeout(() => {
-              document.getElementById('search-input').value = '';
-            }, 750);
-          "
-        >
-          🔍
-        </button>
+        <input type="text" id="search-input" class="input search-input" placeholder="חפש מתכון..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+        <button class="button search-button" onclick="
+            searchRecipes(document.getElementById('search-input').value);
+            setTimeout(() => { document.getElementById('search-input').value = ''; }, 750);
+          ">🔍</button>
       </div>
 
-      <button
-        class="button"
-        style="width: 85%; max-width: 500px"
-        onclick="
-          resetAddForm();
-          navigateTo('view-add', false);
-        "
-      >
+      <button class="button" style="width: 85%; max-width: 500px" onclick="resetAddForm(); navigateTo('view-add', false);">
         הוספת מתכון חדש
       </button>
     </div>
@@ -538,100 +453,58 @@
 
     <div id="view-add" class="view">
       <div class="page-container">
-        <h2 class="label" style="text-align: center; font-size: 1.5rem">
-          הוספת מתכון חדש
-        </h2>
+        <h2 id="view-add-title" class="label" style="text-align: center; font-size: 1.5rem">הוספת מתכון חדש</h2>
 
         <div class="label">שם המתכון</div>
-        <input
-          type="text"
-          id="recipe-name"
-          class="input"
-          placeholder="למשל: עוגת שוקולד"
-        />
+        <input type="text" id="recipe-name" class="input" placeholder="למשל: עוגת שוקולד" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
 
         <div class="label">מצרכים</div>
         <div id="ingredients-list"></div>
 
         <div class="label">אופן ההכנה</div>
-        <textarea
-          id="recipe-method"
-          class="textarea"
-          placeholder="איך מכינים?"
-          oninput="autoResize(this)"
-        ></textarea>
+        <textarea id="recipe-method" class="textarea" placeholder="איך מכינים?" oninput="autoResize(this)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
 
-        <button class="button" id="save-btn" onclick="saveRecipe()">
-          שמור מתכון
-        </button>
+        <button class="button" id="save-btn" onclick="saveRecipe()">שמור מתכון</button>
       </div>
     </div>
 
     <div id="view-recipe" class="view">
       <div class="page-container">
-        <h1
-          id="display-name"
-          style="
-            color: var(--blue-accent);
-            text-align: center;
-            width: 100%;
-            margin-top: 0;
-          "
-        ></h1>
-
+        <h1 id="display-name" style="color: var(--blue-accent); text-align: center; width: 100%; margin-top: 0;"></h1>
         <div class="label">מצרכים</div>
         <ul id="display-ingredients"></ul>
-
         <div class="label">אופן ההכנה</div>
-        <textarea
-          id="display-method"
-          class="textarea readonly-box"
-          readonly
-        ></textarea>
+        <textarea id="display-method" class="textarea readonly-box" readonly></textarea>
 
-        <button
-          class="button"
-          style="background: #ef4444; margin-top: 1.5rem"
-          onclick="askDeleteRecipe()"
-        >
-          מחיקת מתכון
-        </button>
+        <button class="button" style="background: #3b82f6; margin-top: 1.5rem" onclick="openEditRecipe()">עדכון מתכון</button>
+        <button class="button" style="background: #ef4444; margin-top: 0.5rem" onclick="askDeleteRecipe()">מחיקת מתכון</button>
       </div>
     </div>
 
     <script>
-      // ⚠️ החלף את הלינק הזה ללינק החדש של השרת שלך לאחר העדכון! ⚠️
-      const API_URL =
-        "https://script.google.com/macros/s/AKfycbyg7jQ1hnPkzT-yBVJfUbluXyMToMvS06ezUNXHM985po1PyiVccNKf3oeMSDLsxdIT/exec";
-
+      // ⚠️ החלף את הלינק!
+      const API_URL = "https://script.google.com/macros/s/AKfycbyg7jQ1hnPkzT-yBVJfUbluXyMToMvS06ezUNXHM985po1PyiVccNKf3oeMSDLsxdIT/exec";
       const CACHE_KEY = "recipeme_data";
 
       let cachedRecipes = [];
       let currentRecipeName = "";
       let groceryList = [""];
+      let isEditMode = false; // מעקב אם אנחנו בעריכה או בהוספה
 
-      /* --- ניהול הזיכרון המקומי (Local Storage) --- */
       function loadFromCache() {
         try {
           const data = localStorage.getItem(CACHE_KEY);
           if (data) cachedRecipes = JSON.parse(data);
-        } catch (e) {
-          console.error("שגיאה בקריאה מהזיכרון המקומי", e);
-        }
+        } catch (e) { console.error(e); }
       }
 
       function saveToCache() {
         try {
           localStorage.setItem(CACHE_KEY, JSON.stringify(cachedRecipes));
-        } catch (e) {
-          console.warn("Local storage full", e);
-          showToast(
-            "אזהרה: זיכרון הדפדפן מלא. המתכון נשמר בענן אך לא יהיה זמין באופליין.",
-          );
-        }
+        } catch (e) { showToast("זיכרון מלא. נשמר בענן בלבד."); }
       }
 
-      /* --- סנכרון ברקע בעליית האתר --- */
+      // סנכרון תמידי ברקע
       async function backgroundSync() {
         try {
           const res = await fetch(API_URL, {
@@ -641,16 +514,16 @@
           const result = await res.json();
           if (result.status === "success") {
             cachedRecipes = result.data;
-            saveToCache();
+            saveToCache(); // הגיליון תמיד קובע ודורס את הזיכרון
           }
         } catch (e) {
-          console.log("סנכרון רקע נכשל - משתמשים בנתונים הקיימים (אופליין)");
+          console.log("משתמשים בנתוני אופליין");
         }
       }
 
       window.onload = () => {
-        loadFromCache(); // 1. טעינה מיידית מהזיכרון
-        backgroundSync(); // 2. סנכרון שקט ברקע בלי לעצור את המשתמש
+        loadFromCache();
+        backgroundSync(); // רץ מאחורי הקלעים ומוודא שהכל תואם לשרת
 
         navigateTo("view-home", true);
 
@@ -667,34 +540,48 @@
       };
 
       window.onpopstate = (e) => {
-        if (
-          document.getElementById("delete-modal").classList.contains("active")
-        ) {
-          closeDeleteModal();
-          return;
+        if (document.getElementById("delete-modal").classList.contains("active")) {
+          closeDeleteModal(); return;
         }
         if (e.state && e.state.view) switchViewElement(e.state.view);
         else switchViewElement("view-home");
       };
 
       function navigateTo(viewId, replace = false) {
-        if (replace)
-          history.replaceState(
-            { view: viewId },
-            "",
-            `#${viewId.replace("view-", "")}`,
-          );
-        else
-          history.pushState(
-            { view: viewId },
-            "",
-            `#${viewId.replace("view-", "")}`,
-          );
+        if (replace) history.replaceState({ view: viewId }, "", `#${viewId.replace("view-", "")}`);
+        else history.pushState({ view: viewId }, "", `#${viewId.replace("view-", "")}`);
         switchViewElement(viewId);
       }
 
+      // מצב עריכה
+      function openEditRecipe() {
+        isEditMode = true;
+        const recipe = cachedRecipes.find(r => r.name === currentRecipeName);
+        if (!recipe) return;
+
+        document.getElementById("view-add-title").innerText = "עדכון מתכון";
+        const nameInput = document.getElementById("recipe-name");
+        nameInput.value = recipe.name;
+        nameInput.readOnly = true;
+        nameInput.classList.add("readonly-box"); // משחיר את הרקע קצת
+
+        document.getElementById("recipe-method").value = recipe.method;
+        groceryList = [...recipe.ingredients, ""];
+        renderIngredients();
+
+        navigateTo("view-add", false);
+        setTimeout(() => autoResize(document.getElementById("recipe-method")), 50);
+      }
+
+      // חזרה למצב הוספה רגיל
       function resetAddForm() {
-        document.getElementById("recipe-name").value = "";
+        isEditMode = false;
+        document.getElementById("view-add-title").innerText = "הוספת מתכון חדש";
+        const nameInput = document.getElementById("recipe-name");
+        nameInput.value = "";
+        nameInput.readOnly = false;
+        nameInput.classList.remove("readonly-box");
+
         document.getElementById("recipe-method").value = "";
         document.getElementById("recipe-method").style.height = "auto";
         groceryList = [""];
@@ -708,7 +595,6 @@
         if (currentView && currentView.id !== viewId) {
           currentView.classList.add("fading-out");
           currentView.classList.remove("active");
-          // מעבר מהיר יותר - 300 מילישניות
           setTimeout(() => {
             currentView.classList.remove("fading-out");
             currentView.style.display = "none";
@@ -725,10 +611,7 @@
         nextView.classList.add("active");
         window.scrollTo(0, 0);
         if (viewId === "view-recipe") {
-          setTimeout(
-            () => autoResize(document.getElementById("display-method")),
-            50,
-          );
+          setTimeout(() => autoResize(document.getElementById("display-method")), 50);
         }
       }
 
@@ -740,19 +623,16 @@
       }
 
       function createMarqueeText(text) {
-        return text.length > 20
-          ? `<div class="marquee-container"><span class="marquee-text">${text}</span></div>`
-          : text;
+        return text.length > 20 ? `<div class="marquee-container"><span class="marquee-text">${text}</span></div>` : text;
       }
 
-      /* --- חיפוש מקומי (מיידי) --- */
+      // חיפוש כולל תמיכה בנקודה (.)
       function searchRecipesLocal(query) {
         const term = query.trim();
         let results = cachedRecipes;
 
-        if (term) {
+        if (term && term !== ".") {
           results = cachedRecipes.filter((r) => r.name.includes(term));
-          // מיון לפי רלוונטיות
           results.sort((a, b) => a.name.indexOf(term) - b.name.indexOf(term));
         }
 
@@ -776,63 +656,66 @@
         navigateTo("view-search", false);
       }
 
-      // מעטפת לכפתור החיפוש בהטמאל
       function searchRecipes(query) {
         searchRecipesLocal(query);
       }
 
       function renderRecipeData(recipe) {
         currentRecipeName = recipe.name;
-        document.getElementById("display-name").innerHTML = createMarqueeText(
-          recipe.name,
-        );
-        document.getElementById("display-ingredients").innerHTML =
-          recipe.ingredients.map((i) => `<li>${i}</li>`).join("");
+        document.getElementById("display-name").innerHTML = createMarqueeText(recipe.name);
+        document.getElementById("display-ingredients").innerHTML = recipe.ingredients.map((i) => `<li>${i}</li>`).join("");
         document.getElementById("display-method").value = recipe.method;
       }
 
-      /* --- שמירה אופטימית --- */
       async function saveRecipe() {
         const name = document.getElementById("recipe-name").value.trim();
         const method = document.getElementById("recipe-method").value.trim();
         const ingredients = groceryList.filter((item) => item.trim() !== "");
 
         if (!name || !method || ingredients.length === 0) {
-          showToast("חובה למלא שם, מצרכים ואופן הכנה");
-          return;
+          showToast("חובה למלא שם, מצרכים ואופן הכנה"); return;
         }
 
         const newRecipe = { name, ingredients, method };
         const saveBtn = document.getElementById("save-btn");
         saveBtn.disabled = true;
 
-        // 1. ממשק אופטימי - שמירה בזיכרון ומעבר מיידי לדף המתכון!
-        cachedRecipes.unshift(newRecipe); // מוסיף לתחילת המערך
+        const actionType = isEditMode ? "updateRecipe" : "addRecipe";
+
+        // 1. ממשק אופטימי - שמירה בזיכרון
+        if (isEditMode) {
+          const index = cachedRecipes.findIndex(r => r.name === name);
+          if (index > -1) cachedRecipes[index] = newRecipe;
+        } else {
+          cachedRecipes.unshift(newRecipe);
+        }
         saveToCache();
 
-        showToast("המתכון נשמר בהצלחה!");
+        showToast(isEditMode ? "המתכון עודכן בהצלחה!" : "המתכון נשמר בהצלחה!");
         renderRecipeData(newRecipe);
-        navigateTo("view-recipe", true);
+        
+        // מעבר לדף המתכון תוך "מחיקת" דף העריכה מההיסטוריה
+        navigateTo("view-recipe", true); 
         saveBtn.disabled = false;
 
         // 2. סנכרון שקט ברקע מול השרת
         try {
           const response = await fetch(API_URL, {
             method: "POST",
-            body: JSON.stringify({ action: "addRecipe", recipe: newRecipe }),
+            body: JSON.stringify({ action: actionType, recipe: newRecipe }),
           });
           const result = await response.json();
-
           if (result.status !== "success") throw new Error(result.message);
         } catch (error) {
-          // מחיקה מהזיכרון הקאש במקרה של כישלון בשרת
-          cachedRecipes = cachedRecipes.filter((r) => r.name !== name);
+          // מחיקה/שחזור מהקאש במקרה של כישלון בשרת
+          if (!isEditMode) {
+            cachedRecipes = cachedRecipes.filter((r) => r.name !== name);
+          }
           saveToCache();
-          showToast("שגיאה בסנכרון לענן: " + (error.message || "בעיית תקשורת"));
+          showToast("שגיאה בסנכרון לענן: הנתון לא נשמר בשרת");
         }
       }
 
-      /* --- מחיקה אופטימית --- */
       function askDeleteRecipe() {
         document.getElementById("delete-modal").classList.add("active");
       }
@@ -843,34 +726,30 @@
 
       document.getElementById("confirm-delete-btn").onclick = async () => {
         closeDeleteModal();
-
         const nameToDelete = currentRecipeName;
 
-        // 1. גיבוי לפני מחיקה (למקרה של שגיאה) ומחיקה מהירה
-        const recipeIndex = cachedRecipes.findIndex(
-          (r) => r.name === nameToDelete,
-        );
+        const recipeIndex = cachedRecipes.findIndex((r) => r.name === nameToDelete);
         const backupRecipe = cachedRecipes[recipeIndex];
 
         cachedRecipes.splice(recipeIndex, 1);
         saveToCache();
-
         showToast("המתכון נמחק");
-        navigateTo("view-home", true);
 
-        // 2. מחיקה שקטה ברקע מול השרת
+        // ניקוי תוצאות החיפוש כדי שאם המשתמש יחזור אחורה הוא לא יראה את המחוק
+        document.getElementById("search-input").value = "";
+        document.getElementById("search-results").innerHTML = "";
+
+        navigateTo("view-home", true);
+        window.location.href = "#home"; // מאפס לגמרי את המעבר קדימה
+
         try {
           const res = await fetch(API_URL, {
             method: "POST",
-            body: JSON.stringify({
-              action: "deleteRecipe",
-              name: nameToDelete,
-            }),
+            body: JSON.stringify({ action: "deleteRecipe", name: nameToDelete }),
           });
           const result = await res.json();
           if (result.status !== "success") throw new Error(result.message);
         } catch (e) {
-          // שחזור המתכון אם השרת סירב
           if (backupRecipe) {
             cachedRecipes.splice(recipeIndex, 0, backupRecipe);
             saveToCache();
@@ -879,13 +758,10 @@
         }
       };
 
-      /* --- ניהול מצרכים --- */
       function renderIngredients() {
         const container = document.getElementById("ingredients-list");
         container.innerHTML = "";
-        groceryList.forEach((item, index) =>
-          createIngredientInput(index, item),
-        );
+        groceryList.forEach((item, index) => createIngredientInput(index, item));
       }
 
       function createIngredientInput(index, value) {
@@ -895,14 +771,17 @@
         input.className = "input ing-input";
         input.value = value;
         input.placeholder = index === 0 ? "הוסף מצרך ראשון" : "הוסף מצרך נוסף";
+        
+        // כיבוי השלמה אוטומטית לשדות המצרכים הדינמיים
+        input.setAttribute("autocomplete", "off");
+        input.setAttribute("autocorrect", "off");
+        input.setAttribute("autocapitalize", "off");
+        input.setAttribute("spellcheck", "false");
 
         input.oninput = (e) => {
           groceryList[index] = e.target.value;
           autoResize(e.target);
-          if (
-            index === groceryList.length - 1 &&
-            e.target.value.trim() !== ""
-          ) {
+          if (index === groceryList.length - 1 && e.target.value.trim() !== "") {
             groceryList.push("");
             createIngredientInput(groceryList.length - 1, "");
           }
@@ -919,11 +798,7 @@
         input.onblur = (e) => {
           const val = e.target.value.trim();
           groceryList[index] = val;
-          if (
-            val === "" &&
-            index !== groceryList.length - 1 &&
-            groceryList.length > 1
-          ) {
+          if (val === "" && index !== groceryList.length - 1 && groceryList.length > 1) {
             groceryList.splice(index, 1);
             renderIngredients();
           }
@@ -937,28 +812,18 @@
         el.style.height = el.scrollHeight + "px";
       }
 
-      document.addEventListener(
-        "touchstart",
-        function (event) {
-          if (event.touches.length > 1) event.preventDefault();
-        },
-        { passive: false },
-      );
+      document.addEventListener("touchstart", function (event) {
+        if (event.touches.length > 1) event.preventDefault();
+      }, { passive: false });
 
       let lastTouchEnd = 0;
-      document.addEventListener(
-        "touchend",
-        function (event) {
-          const now = new Date().getTime();
-          if (now - lastTouchEnd <= 300) event.preventDefault();
-          lastTouchEnd = now;
-        },
-        false,
-      );
+      document.addEventListener("touchend", function (event) {
+        const now = new Date().getTime();
+        if (now - lastTouchEnd <= 300) event.preventDefault();
+        lastTouchEnd = now;
+      }, false);
     </script>
-
     <script>
-      // רישום Service Worker להתקנת האפליקציה
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("sw.js").catch(function (error) {
           console.log("Service worker registration failed:", error);
