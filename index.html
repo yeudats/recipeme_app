@@ -8,6 +8,7 @@
     />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    
     <link rel="apple-touch-icon" href="icon.png" />
     
     <link rel="manifest" href="manifest.json" />
@@ -250,23 +251,23 @@
       }
 
       .marquee-container {
-        width: calc(100% - 20px);
-        overflow: hidden;
-        white-space: nowrap;
-        position: relative;
-        padding: 0 10px;
-      }
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  display: flex;
+}
 
-      .marquee-text {
-        display: inline-block;
-        animation: marquee 7s linear infinite;
-        animation-delay: 2s;
-      }
+.marquee-text {
+  display: inline-block;
+  padding-left: 50px; /* הרווח בין סוף המשפט להתחלה הבאה */
+  animation: marquee-smooth 15s linear infinite; /* מהירות איטית וחלק יותר */
+}
 
-      @keyframes marquee {
-        0%, 10% { transform: translateX(0); }
-        100% { transform: translateX(100%); }
-      }
+@keyframes marquee-smooth {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(100%); } /* בגלל ה-RTL נשתמש בערך חיובי */
+}
 
       #toast {
         position: fixed;
@@ -570,7 +571,13 @@
         renderIngredients();
 
         navigateTo("view-add", false);
-        setTimeout(() => autoResize(document.getElementById("recipe-method")), 50);
+  
+  // תיקון הגובה: נמתין שהדף יוצג ואז נחשב גובה
+  setTimeout(() => {
+    const methodInput = document.getElementById("recipe-method");
+    methodInput.style.height = 'auto'; 
+    methodInput.style.height = methodInput.scrollHeight + 'px';
+  }, 350); // זמן קצת יותר ארוך מזמן ה-Fade In
       }
 
       // חזרה למצב הוספה רגיל
@@ -623,8 +630,14 @@
       }
 
       function createMarqueeText(text) {
-        return text.length > 20 ? `<div class="marquee-container"><span class="marquee-text">${text}</span></div>` : text;
-      }
+  if (text.length > 20) {
+    // משכפלים את הטקסט כדי ליצור רצף אינסופי
+    return `<div class="marquee-container">
+              <span class="marquee-text">${text} &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; ${text}</span>
+            </div>`;
+  }
+  return text;
+}
 
       // חיפוש כולל תמיכה בנקודה (.)
       function searchRecipesLocal(query) {
@@ -736,8 +749,10 @@
         showToast("המתכון נמחק");
 
         // ניקוי תוצאות החיפוש כדי שאם המשתמש יחזור אחורה הוא לא יראה את המחוק
-        document.getElementById("search-input").value = "";
-        document.getElementById("search-results").innerHTML = "";
+        const searchInput = document.getElementById("search-input");
+if (searchInput.value.trim() !== "") {
+    searchRecipesLocal(searchInput.value); // מרנדר מחדש את החיפוש ללא המתכון שמחקנו
+}
 
         navigateTo("view-home", true);
         window.location.href = "#home"; // מאפס לגמרי את המעבר קדימה
