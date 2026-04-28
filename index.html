@@ -256,17 +256,24 @@
   white-space: nowrap;
   position: relative;
   display: flex;
+  flex-direction: row-reverse; /* מותאם ל-RTL */
 }
 
 .marquee-text {
   display: inline-block;
-  padding-left: 50px; /* הרווח בין סוף המשפט להתחלה הבאה */
-  animation: marquee-smooth 15s linear infinite; /* מהירות איטית וחלק יותר */
+  padding-left: 100px; /* הרווח בין סוף המשפט להתחלה הבאה */
+  white-space: nowrap;
+  min-width: 100%;
 }
 
-@keyframes marquee-smooth {
+/* האנימציה הזו יוצרת תנועה חלקה ללא קפיצות */
+.animate-marquee {
+  animation: marquee-infinite 15s linear infinite;
+}
+
+@keyframes marquee-infinite {
   0% { transform: translateX(0); }
-  100% { transform: translateX(100%); } /* בגלל ה-RTL נשתמש בערך חיובי */
+  100% { transform: translateX(50%); } /* מזיז חצי מהרוחב הכולל (הטקסט הכפול) */
 }
 
       #toast {
@@ -630,11 +637,14 @@
       }
 
       function createMarqueeText(text) {
-  if (text.length > 20) {
+  if (text.length > 35) {
     // משכפלים את הטקסט כדי ליצור רצף אינסופי
-    return `<div class="marquee-container">
-              <span class="marquee-text">${text} &nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp; ${text}</span>
-            </div>`;
+    return `
+    <div class="marquee-container">
+      <div class="marquee-text animate-marquee">
+        ${text} &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp; ${text}
+      </div>
+    </div>`;
   }
   return text;
 }
