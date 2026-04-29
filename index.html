@@ -256,24 +256,28 @@
   white-space: nowrap;
   position: relative;
   display: flex;
-  flex-direction: row-reverse; /* מותאם ל-RTL */
+  direction: rtl; /* עברית רגילה */
 }
 
 .marquee-text {
   display: inline-block;
-  padding-left: 100px; /* הרווח בין סוף המשפט להתחלה הבאה */
   white-space: nowrap;
-  min-width: 100%;
-}
-
-/* האנימציה הזו יוצרת תנועה חלקה ללא קפיצות */
-.animate-marquee {
-  animation: marquee-infinite 15s linear infinite;
+  animation: marquee-infinite 15s linear infinite; /* 15 שניות - איטי ונעים לקריאה */
+  will-change: transform;
 }
 
 @keyframes marquee-infinite {
   0% { transform: translateX(0); }
-  100% { transform: translateX(50%); } /* מזיז חצי מהרוחב הכולל (הטקסט הכפול) */
+  /* מזיז בדיוק חצי מהאורך, בגלל שהטקסט משוכפל פעמיים זה יוצר לופ שקוף לגמרי */
+  100% { transform: translateX(50%); } 
+}
+
+.button:hover .marquee-text {
+  animation-play-state: paused;
+}
+
+.button:active .marquee-text {
+  animation-play-state: paused;
 }
 
       #toast {
@@ -290,6 +294,11 @@
         transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         z-index: 9999;
         pointer-events: none;
+        white-space: nowrap; /* מונע ירידת שורה */
+  width: max-content;  /* מתאים את הרוחב אוטומטית לטקסט */
+  max-width: 90vw;     /* מגבלה למקרה שהטקסט ארוך מהמסך עצמו */
+  overflow: hidden;
+  text-overflow: ellipsis; /* מוסיף ... אם הטקסט ארוך מהמסך */
       }
       #toast.show {
         opacity: 1;
@@ -548,12 +557,29 @@
       };
 
       window.onpopstate = (e) => {
-        if (document.getElementById("delete-modal").classList.contains("active")) {
-          closeDeleteModal(); return;
-        }
-        if (e.state && e.state.view) switchViewElement(e.state.view);
-        else switchViewElement("view-home");
-      };
+  if (document.getElementById("delete-modal").classList.contains("active")) {
+    closeDeleteModal(); 
+    return;
+  }
+  
+  const targetView = (e.state && e.state.view) ? e.state.view : "view-home";
+
+  // מנגנון הגנה: אם המשתמש מנסה לחזור לדף מתכון, נבדוק אם המתכון עדיין קיים
+  if (targetView === "view-recipe") {
+    const recipeExists = cachedRecipes.find(r => r.name === currentRecipeName);
+    if (!recipeExists) {
+      // המתכון נמחק! נעיף אותו לדף הבית במקום לדף שבור
+      history.replaceState({ view: "view-home" }, "", "#home");
+      switchViewElement("view-home");
+      return;
+    } else {
+      // המתכון קיים, נרנדר אותו מחדש למקרה שהוא בדיוק נערך!
+      renderRecipeData(recipeExists);
+    }
+  }
+
+  switchViewElement(targetView);
+};
 
       function navigateTo(viewId, replace = false) {
         if (replace) history.replaceState({ view: viewId }, "", `#${viewId.replace("view-", "")}`);
@@ -582,9 +608,8 @@
   // תיקון הגובה: נמתין שהדף יוצג ואז נחשב גובה
   setTimeout(() => {
     const methodInput = document.getElementById("recipe-method");
-    methodInput.style.height = 'auto'; 
-    methodInput.style.height = methodInput.scrollHeight + 'px';
-  }, 350); // זמן קצת יותר ארוך מזמן ה-Fade In
+    autoResize(methodInput);
+  }, 400);
       }
 
       // חזרה למצב הוספה רגיל
@@ -639,11 +664,12 @@
       function createMarqueeText(text) {
   if (text.length > 35) {
     // משכפלים את הטקסט כדי ליצור רצף אינסופי
+    const separator = "&nbsp;".repeat(15); 
+    const content = `${text}${separator}${text}${separator}`;
     return `
     <div class="marquee-container">
-      <div class="marquee-text animate-marquee">
-        ${text} &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp; ${text}
-      </div>
+      <div class="marquee-text">
+        ${content} </div>
     </div>`;
   }
   return text;
@@ -670,7 +696,10 @@
             b.className = "button";
             b.innerHTML = createMarqueeText(recipe.name);
             b.onclick = () => {
-              renderRecipeData(recipe);
+              // 🔴 התיקון: שולפים את הנתונים המעודכנים ביותר לפי השם רגע לפני המעבר
+              const latestData = cachedRecipes.find(r => r.name === recipe.name) || recipe;
+              
+              renderRecipeData(latestData);
               navigateTo("view-recipe", false);
             };
             list.appendChild(b);
@@ -716,10 +745,18 @@
 
         showToast(isEditMode ? "המתכון עודכן בהצלחה!" : "המתכון נשמר בהצלחה!");
         renderRecipeData(newRecipe);
-        
-        // מעבר לדף המתכון תוך "מחיקת" דף העריכה מההיסטוריה
-        navigateTo("view-recipe", true); 
         saveBtn.disabled = false;
+
+        if (isEditMode) {
+          // אם אנחנו בעריכה, פשוט חוזרים דף אחד אחורה (מוחק את העריכה מההיסטוריה)
+          // ה-onpopstate שיש לנו כבר יזהה את החזרה וירנדר את הנתונים החדשים!
+          history.back(); 
+          history.
+        } else {
+          // אם זה מתכון חדש, הולכים קדימה
+          renderRecipeData(newRecipe);
+          navigateTo("view-recipe", true); 
+        }
 
         // 2. סנכרון שקט ברקע מול השרת
         try {
@@ -779,7 +816,7 @@ if (searchInput.value.trim() !== "") {
             cachedRecipes.splice(recipeIndex, 0, backupRecipe);
             saveToCache();
           }
-          showToast("שגיאה במחיקה מהענן. המתכון שוחזר.");
+          showToast("שגיאה במחיקה מהענן.");
         }
       };
 
@@ -848,6 +885,7 @@ if (searchInput.value.trim() !== "") {
         lastTouchEnd = now;
       }, false);
     </script>
+
     <script>
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker.register("sw.js").catch(function (error) {
