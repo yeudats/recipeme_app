@@ -8,9 +8,9 @@
     />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    
+
     <link rel="apple-touch-icon" href="icon.png" />
-    
+
     <link rel="manifest" href="manifest.json" />
     <title>Recipeme!</title>
     <style>
@@ -19,7 +19,12 @@
         touch-action: manipulation;
       }
       :root {
-        --bg-gradient: linear-gradient(135deg, #fef9c3 0%, #e0f2fe 50%, #f3e8ff 100%);
+        --bg-gradient: linear-gradient(
+          135deg,
+          #fef9c3 0%,
+          #e0f2fe 50%,
+          #f3e8ff 100%
+        );
         --btn-gradient: linear-gradient(135deg, #6ee7b7 0%, #3b82f6 100%);
         --btn-hover-gradient: linear-gradient(135deg, #3b82f6 0%, #6ee7b7 100%);
         --blue-accent: #6366f1;
@@ -31,7 +36,11 @@
       }
 
       body {
-        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
         margin: 0;
         background: var(--bg-gradient);
         background-attachment: fixed;
@@ -251,34 +260,38 @@
       }
 
       .marquee-container {
-  width: 100%;
-  overflow: hidden;
-  white-space: nowrap;
-  position: relative;
-  display: flex;
-  direction: rtl; /* עברית רגילה */
-}
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        position: relative;
+        display: flex;
+        direction: rtl; /* עברית רגילה */
+      }
 
-.marquee-text {
-  display: inline-block;
-  white-space: nowrap;
-  animation: marquee-infinite 15s linear infinite; /* 15 שניות - איטי ונעים לקריאה */
-  will-change: transform;
-}
+      .marquee-text {
+        display: inline-block;
+        white-space: nowrap;
+        animation: marquee-infinite 15s linear infinite; /* 15 שניות - איטי ונעים לקריאה */
+        will-change: transform;
+      }
 
-@keyframes marquee-infinite {
-  0% { transform: translateX(0); }
-  /* מזיז בדיוק חצי מהאורך, בגלל שהטקסט משוכפל פעמיים זה יוצר לופ שקוף לגמרי */
-  100% { transform: translateX(50%); } 
-}
+      @keyframes marquee-infinite {
+        0% {
+          transform: translateX(0);
+        }
+        /* מזיז בדיוק חצי מהאורך, בגלל שהטקסט משוכפל פעמיים זה יוצר לופ שקוף לגמרי */
+        100% {
+          transform: translateX(50%);
+        }
+      }
 
-.button:hover .marquee-text {
-  animation-play-state: paused;
-}
+      .button:hover .marquee-text {
+        animation-play-state: paused;
+      }
 
-.button:active .marquee-text {
-  animation-play-state: paused;
-}
+      .button:active .marquee-text {
+        animation-play-state: paused;
+      }
 
       #toast {
         position: fixed;
@@ -295,10 +308,10 @@
         z-index: 9999;
         pointer-events: none;
         white-space: nowrap; /* מונע ירידת שורה */
-  width: max-content;  /* מתאים את הרוחב אוטומטית לטקסט */
-  max-width: 90vw;     /* מגבלה למקרה שהטקסט ארוך מהמסך עצמו */
-  overflow: hidden;
-  text-overflow: ellipsis; /* מוסיף ... אם הטקסט ארוך מהמסך */
+        width: max-content; /* מתאים את הרוחב אוטומטית לטקסט */
+        max-width: 90vw; /* מגבלה למקרה שהטקסט ארוך מהמסך עצמו */
+        overflow: hidden;
+        text-overflow: ellipsis; /* מוסיף ... אם הטקסט ארוך מהמסך */
       }
       #toast.show {
         opacity: 1;
@@ -375,8 +388,12 @@
         transform: rotate(20deg);
       }
       @keyframes bouncePot {
-        0% { transform: translateY(0); }
-        100% { transform: translateY(-10px); }
+        0% {
+          transform: translateY(0);
+        }
+        100% {
+          transform: translateY(-10px);
+        }
       }
       .loader-text {
         margin-top: 1.5rem;
@@ -432,8 +449,20 @@
         <h3 style="color: #ef4444; margin-top: 0">מחיקת מתכון</h3>
         <p>האם למחוק את המתכון לצמיתות?</p>
         <div style="display: flex; gap: 15px; margin-top: 20px">
-          <button class="button" style="background: #ef4444" id="confirm-delete-btn">כן, מחק</button>
-          <button class="button" style="background: #94a3b8" onclick="closeDeleteModal()">ביטול</button>
+          <button
+            class="button"
+            style="background: #ef4444"
+            id="confirm-delete-btn"
+          >
+            כן, מחק
+          </button>
+          <button
+            class="button"
+            style="background: #94a3b8"
+            onclick="closeDeleteModal()"
+          >
+            ביטול
+          </button>
         </div>
       </div>
     </div>
@@ -446,17 +475,45 @@
     </div>
 
     <div id="view-home" class="view active">
-      <img src="icon.png" class="logo-home" alt="Logo" onerror="this.style.display = 'none'" />
+      <img
+        src="icon.png"
+        class="logo-home"
+        alt="Logo"
+        onerror="this.style.display = 'none'"
+      />
 
       <div class="search-group">
-        <input type="text" id="search-input" class="input search-input" placeholder="חפש מתכון..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
-        <button class="button search-button" onclick="
+        <input
+          type="text"
+          id="search-input"
+          class="input search-input"
+          placeholder="חפש מתכון..."
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        />
+        <button
+          class="button search-button"
+          onclick="
             searchRecipes(document.getElementById('search-input').value);
-            setTimeout(() => { document.getElementById('search-input').value = ''; }, 750);
-          ">🔍</button>
+            setTimeout(() => {
+              document.getElementById('search-input').value = '';
+            }, 750);
+          "
+        >
+          🔍
+        </button>
       </div>
 
-      <button class="button" style="width: 85%; max-width: 500px" onclick="resetAddForm(); navigateTo('view-add', false);">
+      <button
+        class="button"
+        style="width: 85%; max-width: 500px"
+        onclick="
+          resetAddForm();
+          navigateTo('view-add', false);
+        "
+      >
         הוספת מתכון חדש
       </button>
     </div>
@@ -470,37 +527,88 @@
 
     <div id="view-add" class="view">
       <div class="page-container">
-        <h2 id="view-add-title" class="label" style="text-align: center; font-size: 1.5rem">הוספת מתכון חדש</h2>
+        <h2
+          id="view-add-title"
+          class="label"
+          style="text-align: center; font-size: 1.5rem"
+        >
+          הוספת מתכון חדש
+        </h2>
 
         <div class="label">שם המתכון</div>
-        <input type="text" id="recipe-name" class="input" placeholder="למשל: עוגת שוקולד" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+        <input
+          type="text"
+          id="recipe-name"
+          class="input"
+          placeholder="למשל: עוגת שוקולד"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        />
 
         <div class="label">מצרכים</div>
         <div id="ingredients-list"></div>
 
         <div class="label">אופן ההכנה</div>
-        <textarea id="recipe-method" class="textarea" placeholder="איך מכינים?" oninput="autoResize(this)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+        <textarea
+          id="recipe-method"
+          class="textarea"
+          placeholder="איך מכינים?"
+          oninput="autoResize(this)"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        ></textarea>
 
-        <button class="button" id="save-btn" onclick="saveRecipe()">שמור מתכון</button>
+        <button class="button" id="save-btn" onclick="saveRecipe()">
+          שמור מתכון
+        </button>
       </div>
     </div>
 
     <div id="view-recipe" class="view">
       <div class="page-container">
-        <h1 id="display-name" style="color: var(--blue-accent); text-align: center; width: 100%; margin-top: 0;"></h1>
+        <h1
+          id="display-name"
+          style="
+            color: var(--blue-accent);
+            text-align: center;
+            width: 100%;
+            margin-top: 0;
+          "
+        ></h1>
         <div class="label">מצרכים</div>
         <ul id="display-ingredients"></ul>
         <div class="label">אופן ההכנה</div>
-        <textarea id="display-method" class="textarea readonly-box" readonly></textarea>
+        <textarea
+          id="display-method"
+          class="textarea readonly-box"
+          readonly
+        ></textarea>
 
-        <button class="button" style="background: #3b82f6; margin-top: 1.5rem" onclick="openEditRecipe()">עדכון מתכון</button>
-        <button class="button" style="background: #ef4444; margin-top: 0.5rem" onclick="askDeleteRecipe()">מחיקת מתכון</button>
+        <button
+          class="button"
+          style="background: #3b82f6; margin-top: 1.5rem"
+          onclick="openEditRecipe()"
+        >
+          עדכון מתכון
+        </button>
+        <button
+          class="button"
+          style="background: #ef4444; margin-top: 0.5rem"
+          onclick="askDeleteRecipe()"
+        >
+          מחיקת מתכון
+        </button>
       </div>
     </div>
 
     <script>
       // ⚠️ החלף את הלינק!
-      const API_URL = "https://script.google.com/macros/s/AKfycbyg7jQ1hnPkzT-yBVJfUbluXyMToMvS06ezUNXHM985po1PyiVccNKf3oeMSDLsxdIT/exec";
+      const API_URL =
+        "https://script.google.com/macros/s/AKfycbyg7jQ1hnPkzT-yBVJfUbluXyMToMvS06ezUNXHM985po1PyiVccNKf3oeMSDLsxdIT/exec";
       const CACHE_KEY = "recipeme_data";
 
       let cachedRecipes = [];
@@ -512,13 +620,17 @@
         try {
           const data = localStorage.getItem(CACHE_KEY);
           if (data) cachedRecipes = JSON.parse(data);
-        } catch (e) { console.error(e); }
+        } catch (e) {
+          console.error(e);
+        }
       }
 
       function saveToCache() {
         try {
           localStorage.setItem(CACHE_KEY, JSON.stringify(cachedRecipes));
-        } catch (e) { showToast("זיכרון מלא. נשמר בענן בלבד."); }
+        } catch (e) {
+          showToast("זיכרון מלא. נשמר בענן בלבד.");
+        }
       }
 
       // סנכרון תמידי ברקע
@@ -557,40 +669,55 @@
       };
 
       window.onpopstate = (e) => {
-  if (document.getElementById("delete-modal").classList.contains("active")) {
-    closeDeleteModal(); 
-    return;
-  }
-  
-  const targetView = (e.state && e.state.view) ? e.state.view : "view-home";
+        if (
+          document.getElementById("delete-modal").classList.contains("active")
+        ) {
+          closeDeleteModal();
+          return;
+        }
 
-  // מנגנון הגנה: אם המשתמש מנסה לחזור לדף מתכון, נבדוק אם המתכון עדיין קיים
-  if (targetView === "view-recipe") {
-    const recipeExists = cachedRecipes.find(r => r.name === currentRecipeName);
-    if (!recipeExists) {
-      // המתכון נמחק! נעיף אותו לדף הבית במקום לדף שבור
-      history.replaceState({ view: "view-home" }, "", "#home");
-      switchViewElement("view-home");
-      return;
-    } else {
-      // המתכון קיים, נרנדר אותו מחדש למקרה שהוא בדיוק נערך!
-      renderRecipeData(recipeExists);
-    }
-  }
+        const targetView = e.state && e.state.view ? e.state.view : "view-home";
 
-  switchViewElement(targetView);
-};
+        // מנגנון הגנה: אם המשתמש מנסה לחזור לדף מתכון, נבדוק אם המתכון עדיין קיים
+        if (targetView === "view-recipe") {
+          const recipeExists = cachedRecipes.find(
+            (r) => r.name === currentRecipeName,
+          );
+          if (!recipeExists) {
+            // המתכון נמחק! נעיף אותו לדף הבית במקום לדף שבור
+            history.replaceState({ view: "view-home" }, "", "#home");
+            switchViewElement("view-home");
+            return;
+          } else {
+              
+            // המתכון קיים, נרנדר אותו מחדש למקרה שהוא בדיוק נערך!
+            renderRecipeData(recipeExists);
+          }
+        }
+
+        switchViewElement(targetView);
+      };
 
       function navigateTo(viewId, replace = false) {
-        if (replace) history.replaceState({ view: viewId }, "", `#${viewId.replace("view-", "")}`);
-        else history.pushState({ view: viewId }, "", `#${viewId.replace("view-", "")}`);
+        if (replace)
+          history.replaceState(
+            { view: viewId },
+            "",
+            `#${viewId.replace("view-", "")}`,
+          );
+        else
+          history.pushState(
+            { view: viewId },
+            "",
+            `#${viewId.replace("view-", "")}`,
+          );
         switchViewElement(viewId);
       }
 
       // מצב עריכה
       function openEditRecipe() {
         isEditMode = true;
-        const recipe = cachedRecipes.find(r => r.name === currentRecipeName);
+        const recipe = cachedRecipes.find((r) => r.name === currentRecipeName);
         if (!recipe) return;
 
         document.getElementById("view-add-title").innerText = "עדכון מתכון";
@@ -603,13 +730,13 @@
         groceryList = [...recipe.ingredients, ""];
         renderIngredients();
 
-        navigateTo("view-add", false);
-  
-  // תיקון הגובה: נמתין שהדף יוצג ואז נחשב גובה
-  setTimeout(() => {
-    const methodInput = document.getElementById("recipe-method");
-    autoResize(methodInput);
-  }, 400);
+        navigateTo("view-add", true);
+
+        // תיקון הגובה: נמתין שהדף יוצג ואז נחשב גובה
+        setTimeout(() => {
+          const methodInput = document.getElementById("recipe-method");
+          autoResize(methodInput);
+        }, 350);
       }
 
       // חזרה למצב הוספה רגיל
@@ -650,7 +777,10 @@
         nextView.classList.add("active");
         window.scrollTo(0, 0);
         if (viewId === "view-recipe") {
-          setTimeout(() => autoResize(document.getElementById("display-method")), 50);
+          setTimeout(
+            () => autoResize(document.getElementById("display-method")),
+            50,
+          );
         }
       }
 
@@ -662,18 +792,18 @@
       }
 
       function createMarqueeText(text) {
-  if (text.length > 35) {
-    // משכפלים את הטקסט כדי ליצור רצף אינסופי
-    const separator = "&nbsp;".repeat(15); 
-    const content = `${text}${separator}${text}${separator}`;
-    return `
+        if (text.length > 35) {
+          // משכפלים את הטקסט כדי ליצור רצף אינסופי
+          const separator = "&nbsp;".repeat(15);
+          const content = `${text}${separator}${text}${separator}`;
+          return `
     <div class="marquee-container">
       <div class="marquee-text">
         ${content} </div>
     </div>`;
-  }
-  return text;
-}
+        }
+        return text;
+      }
 
       // חיפוש כולל תמיכה בנקודה (.)
       function searchRecipesLocal(query) {
@@ -697,8 +827,9 @@
             b.innerHTML = createMarqueeText(recipe.name);
             b.onclick = () => {
               // 🔴 התיקון: שולפים את הנתונים המעודכנים ביותר לפי השם רגע לפני המעבר
-              const latestData = cachedRecipes.find(r => r.name === recipe.name) || recipe;
-              
+              const latestData =
+                cachedRecipes.find((r) => r.name === recipe.name) || recipe;
+
               renderRecipeData(latestData);
               navigateTo("view-recipe", false);
             };
@@ -714,8 +845,11 @@
 
       function renderRecipeData(recipe) {
         currentRecipeName = recipe.name;
-        document.getElementById("display-name").innerHTML = createMarqueeText(recipe.name);
-        document.getElementById("display-ingredients").innerHTML = recipe.ingredients.map((i) => `<li>${i}</li>`).join("");
+        document.getElementById("display-name").innerHTML = createMarqueeText(
+          recipe.name,
+        );
+        document.getElementById("display-ingredients").innerHTML =
+          recipe.ingredients.map((i) => `<li>${i}</li>`).join("");
         document.getElementById("display-method").value = recipe.method;
       }
 
@@ -725,7 +859,8 @@
         const ingredients = groceryList.filter((item) => item.trim() !== "");
 
         if (!name || !method || ingredients.length === 0) {
-          showToast("חובה למלא שם, מצרכים ואופן הכנה"); return;
+          showToast("חובה למלא שם, מצרכים ואופן הכנה");
+          return;
         }
 
         const newRecipe = { name, ingredients, method };
@@ -736,7 +871,7 @@
 
         // 1. ממשק אופטימי - שמירה בזיכרון
         if (isEditMode) {
-          const index = cachedRecipes.findIndex(r => r.name === name);
+          const index = cachedRecipes.findIndex((r) => r.name === name);
           if (index > -1) cachedRecipes[index] = newRecipe;
         } else {
           cachedRecipes.unshift(newRecipe);
@@ -748,14 +883,11 @@
         saveBtn.disabled = false;
 
         if (isEditMode) {
-          // אם אנחנו בעריכה, פשוט חוזרים דף אחד אחורה (מוחק את העריכה מההיסטוריה)
-          // ה-onpopstate שיש לנו כבר יזהה את החזרה וירנדר את הנתונים החדשים!
-          history.back(); 
-          history.
+          navigateTo("view-recipe", true);
         } else {
           // אם זה מתכון חדש, הולכים קדימה
           renderRecipeData(newRecipe);
-          navigateTo("view-recipe", true); 
+          navigateTo("view-recipe", true);
         }
 
         // 2. סנכרון שקט ברקע מול השרת
@@ -788,7 +920,9 @@
         closeDeleteModal();
         const nameToDelete = currentRecipeName;
 
-        const recipeIndex = cachedRecipes.findIndex((r) => r.name === nameToDelete);
+        const recipeIndex = cachedRecipes.findIndex(
+          (r) => r.name === nameToDelete,
+        );
         const backupRecipe = cachedRecipes[recipeIndex];
 
         cachedRecipes.splice(recipeIndex, 1);
@@ -797,9 +931,9 @@
 
         // ניקוי תוצאות החיפוש כדי שאם המשתמש יחזור אחורה הוא לא יראה את המחוק
         const searchInput = document.getElementById("search-input");
-if (searchInput.value.trim() !== "") {
-    searchRecipesLocal(searchInput.value); // מרנדר מחדש את החיפוש ללא המתכון שמחקנו
-}
+        if (searchInput.value.trim() !== "") {
+          searchRecipesLocal(searchInput.value); // מרנדר מחדש את החיפוש ללא המתכון שמחקנו
+        }
 
         navigateTo("view-home", true);
         window.location.href = "#home"; // מאפס לגמרי את המעבר קדימה
@@ -807,7 +941,10 @@ if (searchInput.value.trim() !== "") {
         try {
           const res = await fetch(API_URL, {
             method: "POST",
-            body: JSON.stringify({ action: "deleteRecipe", name: nameToDelete }),
+            body: JSON.stringify({
+              action: "deleteRecipe",
+              name: nameToDelete,
+            }),
           });
           const result = await res.json();
           if (result.status !== "success") throw new Error(result.message);
@@ -823,7 +960,9 @@ if (searchInput.value.trim() !== "") {
       function renderIngredients() {
         const container = document.getElementById("ingredients-list");
         container.innerHTML = "";
-        groceryList.forEach((item, index) => createIngredientInput(index, item));
+        groceryList.forEach((item, index) =>
+          createIngredientInput(index, item),
+        );
       }
 
       function createIngredientInput(index, value) {
@@ -833,7 +972,7 @@ if (searchInput.value.trim() !== "") {
         input.className = "input ing-input";
         input.value = value;
         input.placeholder = index === 0 ? "הוסף מצרך ראשון" : "הוסף מצרך נוסף";
-        
+
         // כיבוי השלמה אוטומטית לשדות המצרכים הדינמיים
         input.setAttribute("autocomplete", "off");
         input.setAttribute("autocorrect", "off");
@@ -843,7 +982,10 @@ if (searchInput.value.trim() !== "") {
         input.oninput = (e) => {
           groceryList[index] = e.target.value;
           autoResize(e.target);
-          if (index === groceryList.length - 1 && e.target.value.trim() !== "") {
+          if (
+            index === groceryList.length - 1 &&
+            e.target.value.trim() !== ""
+          ) {
             groceryList.push("");
             createIngredientInput(groceryList.length - 1, "");
           }
@@ -860,7 +1002,11 @@ if (searchInput.value.trim() !== "") {
         input.onblur = (e) => {
           const val = e.target.value.trim();
           groceryList[index] = val;
-          if (val === "" && index !== groceryList.length - 1 && groceryList.length > 1) {
+          if (
+            val === "" &&
+            index !== groceryList.length - 1 &&
+            groceryList.length > 1
+          ) {
             groceryList.splice(index, 1);
             renderIngredients();
           }
@@ -874,16 +1020,24 @@ if (searchInput.value.trim() !== "") {
         el.style.height = el.scrollHeight + "px";
       }
 
-      document.addEventListener("touchstart", function (event) {
-        if (event.touches.length > 1) event.preventDefault();
-      }, { passive: false });
+      document.addEventListener(
+        "touchstart",
+        function (event) {
+          if (event.touches.length > 1) event.preventDefault();
+        },
+        { passive: false },
+      );
 
       let lastTouchEnd = 0;
-      document.addEventListener("touchend", function (event) {
-        const now = new Date().getTime();
-        if (now - lastTouchEnd <= 300) event.preventDefault();
-        lastTouchEnd = now;
-      }, false);
+      document.addEventListener(
+        "touchend",
+        function (event) {
+          const now = new Date().getTime();
+          if (now - lastTouchEnd <= 300) event.preventDefault();
+          lastTouchEnd = now;
+        },
+        false,
+      );
     </script>
 
     <script>
