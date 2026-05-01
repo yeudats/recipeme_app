@@ -47,11 +47,14 @@
         min-height: 100dvh;
         color: var(--text-main);
         overflow-x: hidden;
-        user-select: none;
+        /* user-select: none;
         -webkit-user-select: none;
-        -ms-user-select: none;
+        -ms-user-select: none; */
         position: relative;
         display: block;
+        scroll-behavior: smooth;
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-top: env(safe-area-inset-top);
       }
 
       .page-container {
@@ -67,7 +70,7 @@
         border-radius: 1.2rem;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         border: 1px solid rgba(255, 255, 255, 0.5);
-        text-align: center;
+        /* text-align: center; */
         box-sizing: border-box;
       }
 
@@ -89,6 +92,9 @@
         text-decoration: none;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         z-index: 10;
+        user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
       }
 
       .button:hover,
@@ -111,7 +117,9 @@
         transition: all 0.3s ease;
         user-select: text;
         -webkit-user-select: text;
+        -ms-user-select: text;
         font-family: inherit;
+        transition: padding 0.3s ease; /* מעבר חלק כשהמקלדת עולה/יורדת */
       }
 
       .input:focus,
@@ -133,7 +141,6 @@
         background-color: var(--readonly-bg) !important;
         color: var(--readonly-text);
         border: 1px solid var(--readonly-border);
-        pointer-events: none;
         text-align: right;
       }
 
@@ -199,6 +206,10 @@
         color: var(--blue-accent);
         margin-top: 0.8rem;
         font-size: 1.1rem;
+        pointer-events: none;
+        -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
       }
 
       #view-home {
@@ -206,7 +217,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        padding-top: 5vh;
+        /* padding-top: 5dvh; */
       }
 
       .logo-home {
@@ -215,6 +226,16 @@
         margin: 5dvh auto 20dvh auto;
         border-radius: 50%;
         object-fit: cover;
+        /* מונע בחירה של התמונה */
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    /* מונע גרירה של התמונה */
+    -webkit-user-drag: none;
+    
+    /* מונע את הופעת זכוכית המגדלת או תפריטים ארוכים בנייד (iOS/Android) */
+    -webkit-touch-callout: none;
       }
 
       .search-group {
@@ -480,6 +501,8 @@
         class="logo-home"
         alt="Logo"
         onerror="this.style.display = 'none'"
+        oncontextmenu="return false;" 
+     ondragstart="return false;"
       />
 
       <div class="search-group">
@@ -488,7 +511,7 @@
           id="search-input"
           class="input search-input"
           placeholder="חפש מתכון..."
-          autocomplete="off"
+          autocomplete="don`t complete me please"
           autocorrect="off"
           autocapitalize="off"
           spellcheck="false"
@@ -541,7 +564,7 @@
           id="recipe-name"
           class="input"
           placeholder="למשל: עוגת שוקולד"
-          autocomplete="off"
+          autocomplete="don`t complete me please"
           autocorrect="off"
           autocapitalize="off"
           spellcheck="false"
@@ -556,7 +579,7 @@
           class="textarea"
           placeholder="איך מכינים?"
           oninput="autoResize(this)"
-          autocomplete="off"
+          autocomplete="don`t complete me please"
           autocorrect="off"
           autocapitalize="off"
           spellcheck="false"
@@ -582,11 +605,10 @@
         <div class="label">מצרכים</div>
         <ul id="display-ingredients"></ul>
         <div class="label">אופן ההכנה</div>
-        <textarea
+        <div
           id="display-method"
-          class="textarea readonly-box"
-          readonly
-        ></textarea>
+          class="textarea"
+        ></div>
 
         <button
           class="button"
@@ -653,6 +675,13 @@
       window.onload = () => {
         loadFromCache();
         backgroundSync(); // רץ מאחורי הקלעים ומוודא שהכל תואם לשרת
+
+        // if (window.visualViewport) {
+        //     window.visualViewport.addEventListener('resize', updateViewportHeight);
+        // } else {
+        //     window.addEventListener('resize', updateViewportHeight);
+        // }
+        // updateViewportHeight(); // קריאה ראשונית
 
         navigateTo("view-home", true);
 
@@ -731,7 +760,6 @@
         renderIngredients();
 
         navigateTo("view-add", true);
-
         // תיקון הגובה: נמתין שהדף יוצג ואז נחשב גובה
         setTimeout(() => {
           const methodInput = document.getElementById("recipe-method");
@@ -777,10 +805,11 @@
         nextView.classList.add("active");
         window.scrollTo(0, 0);
         if (viewId === "view-recipe") {
-          setTimeout(
-            () => autoResize(document.getElementById("display-method")),
-            50,
-          );
+          autoResize(document.getElementById("display-method"))
+          // setTimeout(
+          //   () => autoResize(document.getElementById("display-method")),
+          //   30,
+          // );
         }
       }
 
@@ -850,7 +879,7 @@
         );
         document.getElementById("display-ingredients").innerHTML =
           recipe.ingredients.map((i) => `<li>${i}</li>`).join("");
-        document.getElementById("display-method").value = recipe.method;
+        document.getElementById("display-method").innerText = recipe.method;
       }
 
       async function saveRecipe() {
@@ -981,7 +1010,7 @@
 
         input.oninput = (e) => {
           groceryList[index] = e.target.value;
-          autoResize(e.target);
+          // autoResize(e.target);
           if (
             index === groceryList.length - 1 &&
             e.target.value.trim() !== ""
@@ -1038,6 +1067,13 @@
         },
         false,
       );
+
+        // מניעת לחיצה ימנית על כל התמונות בדף
+document.addEventListener('contextmenu', function(e) {
+    if (e.target.tagName === 'IMG') {
+        e.preventDefault();
+    }
+}, false);
     </script>
 
     <script>
