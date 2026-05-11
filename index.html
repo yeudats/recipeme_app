@@ -113,14 +113,22 @@
         box-shadow: 0 4px 12px rgba(253, 160, 133, 0.4);
       }
 
+      .input {
+        height: 3rem;
+        padding-right: 1rem;
+        align-content: center;
+      }
       .input,
       .textarea {
         width: 100%;
-        padding: 0.75rem 1rem;
         margin: 0.5rem 0;
         border: 1px solid #cbd5e1;
         border-radius: 0.75rem;
         font-size: 16px;
+        line-height: 1.6;
+        resize: none;
+        overflow: hidden;
+        box-sizing: border-box;
         background: #fff;
         box-sizing: border-box;
         outline: none;
@@ -140,20 +148,8 @@
       }
 
       .textarea {
-        width: 100%;
         min-height: 120px;
-
-        resize: none;
-
-        overflow: hidden;
-
-        line-height: 1.6;
-
         padding: 0.75rem 1rem;
-
-        box-sizing: border-box;
-
-        -webkit-overflow-scrolling: touch;
       }
 
       .readonly-box {
