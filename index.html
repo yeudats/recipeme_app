@@ -38,7 +38,7 @@
       }
 
       html {
-  height: 100%;
+  min-height: 100%;
   background: linear-gradient(
     135deg,
     #fef9c3 0%,
@@ -51,7 +51,6 @@
 
 body {
   margin: 0;
-  min-height: 100vh;
   color: var(--text-main);
   overflow-x: hidden;
   overflow-y: auto;
@@ -63,15 +62,8 @@ body {
     sans-serif;
 
   background: transparent;
-
-  -webkit-text-size-adjust: 100%;
 }
 
-html,
-body {
-  overflow-y: auto;
-  touch-action: pan-y;
-}
 
       .page-container {
         display: flex;
@@ -494,10 +486,6 @@ input::-webkit-credentials-auto-fill-button {
     </style>
   </head>
   <body>
-    <form style="display:none">
-  <input type="text" autocomplete="username">
-  <input type="password" autocomplete="new-password">
-</form>
     <div id="toast">הודעה</div>
 
     <div id="delete-modal" class="modal-overlay" onclick="closeDeleteModal()">
@@ -1136,39 +1124,39 @@ data-form-type="other"
         false,
       );
 
-      let keyboardOpen = false;
+      // let keyboardOpen = false;
 
-function handleKeyboardViewport() {
-  if (!window.visualViewport) return;
+// function handleKeyboardViewport() {
+//   if (!window.visualViewport) return;
 
-  const viewport = window.visualViewport;
-  const keyboardHeight = window.innerHeight - viewport.height;
+//   const viewport = window.visualViewport;
+//   const keyboardHeight = window.innerHeight - viewport.height;
 
-  keyboardOpen = keyboardHeight > 150;
+//   keyboardOpen = keyboardHeight > 150;
 
-  document.documentElement.style.setProperty(
-    "--keyboard-height",
-    `${keyboardHeight}px`
-  );
+//   document.documentElement.style.setProperty(
+//     "--keyboard-height",
+//     `${keyboardHeight}px`
+//   );
 
-  // const active = document.activeElement;
+//   // const active = document.activeElement;
 
-  // if (
-  //   active &&
-  //   (active.tagName === "TEXTAREA" || active.tagName === "INPUT")
-  // ) {
-  //   setTimeout(() => {
-  //     active.scrollIntoView({
-  //       block: "center",
-  //       behavior: "instant",
-  //     });
-  //   }, 50);
-  // }
-}
+//   // if (
+//   //   active &&
+//   //   (active.tagName === "TEXTAREA" || active.tagName === "INPUT")
+//   // ) {
+//   //   setTimeout(() => {
+//   //     active.scrollIntoView({
+//   //       block: "center",
+//   //       behavior: "instant",
+//   //     });
+//   //   }, 50);
+//   // }
+// }
 
-if (window.visualViewport) {
-  visualViewport.addEventListener("resize", handleKeyboardViewport);
-}
+// if (window.visualViewport) {
+//   visualViewport.addEventListener("resize", handleKeyboardViewport);
+// }
 
 
 function keepCaretVisible(el) {
