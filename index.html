@@ -6,9 +6,12 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
 
     <link rel="apple-touch-icon" href="icon.png" />
 
@@ -38,32 +41,31 @@
       }
 
       html {
-  min-height: 100%;
-  background: linear-gradient(
-    135deg,
-    #fef9c3 0%,
-    #e0f2fe 50%,
-    #f3e8ff 100%
-  );
-  background-repeat: no-repeat;
-  background-size: cover;
-}
+        min-height: 100%;
+        background: linear-gradient(
+          135deg,
+          #fef9c3 0%,
+          #e0f2fe 50%,
+          #f3e8ff 100%
+        );
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
 
-body {
-  margin: 0;
-  color: var(--text-main);
-  overflow-x: hidden;
-  overflow-y: auto;
+      body {
+        margin: 0;
+        color: var(--text-main);
+        overflow-x: hidden;
+        overflow-y: auto;
 
-  font-family:
-    "Segoe UI",
-    system-ui,
-    -apple-system,
-    sans-serif;
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
 
-  background: transparent;
-}
-
+        background: transparent;
+      }
 
       .page-container {
         display: flex;
@@ -130,7 +132,6 @@ body {
         transition: padding 0.3s ease; /* מעבר חלק כשהמקלדת עולה/יורדת */
       }
 
-
       .input:focus,
       .textarea:focus {
         border-color: var(--blue-accent);
@@ -139,32 +140,31 @@ body {
       }
 
       .textarea {
-  width: 100%;
-  min-height: 120px;
+        width: 100%;
+        min-height: 120px;
 
-  resize: none;
+        resize: none;
 
-  overflow: hidden;
+        overflow: hidden;
 
-  line-height: 1.6;
+        line-height: 1.6;
 
-  padding: 0.75rem 1rem;
+        padding: 0.75rem 1rem;
 
-  box-sizing: border-box;
+        box-sizing: border-box;
 
-  -webkit-overflow-scrolling: touch;
-}
+        -webkit-overflow-scrolling: touch;
+      }
 
-
-input::-webkit-contacts-auto-fill-button,
-input::-webkit-credentials-auto-fill-button {
-  visibility: hidden;
-  display: none !important;
-  pointer-events: none;
-  height: 0;
-  width: 0;
-  margin: 0;
-}
+      input::-webkit-contacts-auto-fill-button,
+      input::-webkit-credentials-auto-fill-button {
+        visibility: hidden;
+        display: none !important;
+        pointer-events: none;
+        height: 0;
+        width: 0;
+        margin: 0;
+      }
 
       .readonly-box {
         background-color: var(--readonly-bg) !important;
@@ -453,27 +453,27 @@ input::-webkit-credentials-auto-fill-button {
       }
 
       .view {
-  display: none;
-  opacity: 0;
+        display: none;
+        opacity: 0;
 
-  width: 100%;
-  min-height: 100%;
+        width: 100%;
+        min-height: 100%;
 
-  transition: opacity 0.25s ease;
+        transition: opacity 0.25s ease;
 
-  flex-direction: column;
-  align-items: center;
+        flex-direction: column;
+        align-items: center;
 
-  position: relative;
+        position: relative;
 
-  pointer-events: none;
-}
+        pointer-events: none;
+      }
 
-.view.active {
-  display: flex;
-  opacity: 1;
-  pointer-events: auto;
-}
+      .view.active {
+        display: flex;
+        opacity: 1;
+        pointer-events: auto;
+      }
 
       /* .view.fading-out {
         display: flex;
@@ -535,11 +535,11 @@ input::-webkit-credentials-auto-fill-button {
           class="input search-input"
           placeholder="חפש מתכון..."
           autocomplete="off"
-autocorrect="off"
-autocapitalize="off"
-spellcheck="false"
-inputmode="text"
-data-form-type="other"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          inputmode="text"
+          data-form-type="other"
         />
         <button
           class="button search-button"
@@ -590,11 +590,11 @@ data-form-type="other"
           class="input"
           placeholder="למשל: עוגת שוקולד"
           autocomplete="off"
-autocorrect="off"
-autocapitalize="off"
-spellcheck="false"
-inputmode="text"
-data-form-type="other"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          inputmode="text"
+          data-form-type="other"
         />
 
         <div class="label">מצרכים</div>
@@ -605,13 +605,16 @@ data-form-type="other"
           id="recipe-method"
           class="textarea"
           placeholder="איך מכינים?"
-          oninput="autoResize(this); keepCaretVisible(this)"
+          oninput="
+            autoResize(this);
+            keepCaretVisible(this);
+          "
           autocomplete="off"
-autocorrect="off"
-autocapitalize="off"
-spellcheck="false"
-inputmode="text"
-data-form-type="other"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+          inputmode="text"
+          data-form-type="other"
         ></textarea>
 
         <button class="button" id="save-btn" onclick="saveRecipe()">
@@ -1030,7 +1033,7 @@ data-form-type="other"
 
       function createIngredientInput(index, value) {
         const container = document.getElementById("ingredients-list");
-        const input = document.createElement("input");
+        const input = document.createElement("textarea");
         input.type = "text";
         input.className = "input ing-input";
         input.value = value;
@@ -1083,16 +1086,13 @@ data-form-type="other"
       }
 
       function autoResize(el) {
-  const prev = window.scrollY;
+        const prev = window.scrollY;
 
-  el.style.height = "auto";
-  el.style.height = el.scrollHeight + "px";
+        el.style.height = "auto";
+        el.style.height = el.scrollHeight + "px";
 
-  window.scrollTo(0, prev);
-}
-
-      
-
+        window.scrollTo(0, prev);
+      }
 
       document.addEventListener(
         "touchstart",
@@ -1126,66 +1126,65 @@ data-form-type="other"
 
       // let keyboardOpen = false;
 
-// function handleKeyboardViewport() {
-//   if (!window.visualViewport) return;
+      // function handleKeyboardViewport() {
+      //   if (!window.visualViewport) return;
 
-//   const viewport = window.visualViewport;
-//   const keyboardHeight = window.innerHeight - viewport.height;
+      //   const viewport = window.visualViewport;
+      //   const keyboardHeight = window.innerHeight - viewport.height;
 
-//   keyboardOpen = keyboardHeight > 150;
+      //   keyboardOpen = keyboardHeight > 150;
 
-//   document.documentElement.style.setProperty(
-//     "--keyboard-height",
-//     `${keyboardHeight}px`
-//   );
+      //   document.documentElement.style.setProperty(
+      //     "--keyboard-height",
+      //     `${keyboardHeight}px`
+      //   );
 
-//   // const active = document.activeElement;
+      //   // const active = document.activeElement;
 
-//   // if (
-//   //   active &&
-//   //   (active.tagName === "TEXTAREA" || active.tagName === "INPUT")
-//   // ) {
-//   //   setTimeout(() => {
-//   //     active.scrollIntoView({
-//   //       block: "center",
-//   //       behavior: "instant",
-//   //     });
-//   //   }, 50);
-//   // }
-// }
+      //   // if (
+      //   //   active &&
+      //   //   (active.tagName === "TEXTAREA" || active.tagName === "INPUT")
+      //   // ) {
+      //   //   setTimeout(() => {
+      //   //     active.scrollIntoView({
+      //   //       block: "center",
+      //   //       behavior: "instant",
+      //   //     });
+      //   //   }, 50);
+      //   // }
+      // }
 
-// if (window.visualViewport) {
-//   visualViewport.addEventListener("resize", handleKeyboardViewport);
-// }
+      // if (window.visualViewport) {
+      //   visualViewport.addEventListener("resize", handleKeyboardViewport);
+      // }
 
+      function keepCaretVisible(el) {
+        requestAnimationFrame(() => {
+          const caret = el.selectionStart;
 
-function keepCaretVisible(el) {
-  requestAnimationFrame(() => {
-    const caret = el.selectionStart;
+          const textBefore = el.value.substring(0, caret);
 
-    const textBefore = el.value.substring(0, caret);
+          const lines = textBefore.split("\n").length;
 
-    const lines = textBefore.split("\n").length;
+          const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
 
-    const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
+          const caretY = lines * lineHeight;
 
-    const caretY = lines * lineHeight;
+          const visibleTop = el.scrollTop;
 
-    const visibleTop = el.scrollTop;
+          const visibleBottom = visibleTop + el.clientHeight;
 
-    const visibleBottom = visibleTop + el.clientHeight;
+          const margin = lineHeight * 2;
 
-    const margin = lineHeight * 2;
+          if (caretY + margin > visibleBottom) {
+            el.scrollTop = caretY - el.clientHeight + margin;
+          }
 
-    if (caretY + margin > visibleBottom) {
-      el.scrollTop = caretY - el.clientHeight + margin;
-    }
-
-    if (caretY - margin < visibleTop) {
-      el.scrollTop = Math.max(0, caretY - margin);
-    }
-  });
-}
+          if (caretY - margin < visibleTop) {
+            el.scrollTop = Math.max(0, caretY - margin);
+          }
+        });
+      }
     </script>
 
     <script>
