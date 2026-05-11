@@ -7,12 +7,12 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
     <link rel="apple-touch-icon" href="icon.png" />
 
     <link rel="manifest" href="manifest.json" />
-    <meta name="theme-color" content="#e0f2fe" />
+    <meta name="theme-color" content="transparent" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>Recipeme!</title>
     <style>
       * {
@@ -36,36 +36,42 @@
         --readonly-border: #e2e8f0;
       }
 
-      html,
-body {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow-x: hidden;
-  overscroll-behavior-y: none;
+      html {
+  min-height: 100%;
+  background: linear-gradient(
+    135deg,
+    #fef9c3 0%,
+    #e0f2fe 50%,
+    #f3e8ff 100%
+  );
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text-main);
+  overflow-x: hidden;
+  overflow-y: auto;
+
   font-family:
     "Segoe UI",
     system-ui,
     -apple-system,
     sans-serif;
 
-  background: var(--bg-gradient);
-  /* background-attachment: fixed; */
-
-  color: var(--text-main);
-
-  min-height: 100vh;
-  min-height: -webkit-fill-available;
-
-  position: relative;
-
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-top: env(safe-area-inset-top);
+  background: transparent;
 
   -webkit-text-size-adjust: 100%;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+html,
+body {
+  overflow-y: auto;
+  touch-action: pan-y;
 }
 
       .page-container {
@@ -147,18 +153,23 @@ select {
       }
 
       .textarea {
+  width: 100%;
   min-height: 120px;
 
   resize: none;
-  overflow: hidden;
 
-  line-height: 1.7;
+  overflow-y: auto;
+  overflow-x: hidden;
 
-  padding-bottom: 4lh;
+  line-height: 1.6;
 
-  scroll-padding-bottom: 4lh;
+  padding: 0.75rem 1rem;
 
-  caret-color: #2563eb;
+  box-sizing: border-box;
+
+  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0);
+  will-change: scroll-position;
 }
 
 
@@ -492,6 +503,10 @@ input::-webkit-credentials-auto-fill-button {
     </style>
   </head>
   <body>
+    <form style="display:none">
+  <input type="text" autocomplete="username">
+  <input type="password" autocomplete="new-password">
+</form>
     <div id="toast">הודעה</div>
 
     <div id="delete-modal" class="modal-overlay" onclick="closeDeleteModal()">
@@ -540,14 +555,12 @@ input::-webkit-credentials-auto-fill-button {
           id="search-input"
           class="input search-input"
           placeholder="חפש מתכון..."
-          autocorrect="off"
-          autocapitalize="off"
-          spellcheck="false"
-
-          autocomplete="new-password"
-          data-lpignore="true"
-          data-form-type="other"
-          name="no-autofill"
+          autocomplete="off"
+autocorrect="off"
+autocapitalize="off"
+spellcheck="false"
+inputmode="text"
+data-form-type="other"
         />
         <button
           class="button search-button"
@@ -597,14 +610,12 @@ input::-webkit-credentials-auto-fill-button {
           id="recipe-name"
           class="input"
           placeholder="למשל: עוגת שוקולד"
-          autocorrect="off"
-          autocapitalize="off"
-          spellcheck="false"
-
-          autocomplete="new-password"
-data-lpignore="true"
+          autocomplete="off"
+autocorrect="off"
+autocapitalize="off"
+spellcheck="false"
+inputmode="text"
 data-form-type="other"
-name="no-autofill"
         />
 
         <div class="label">מצרכים</div>
@@ -616,14 +627,12 @@ name="no-autofill"
           class="textarea"
           placeholder="איך מכינים?"
           oninput="autoResize(this); keepCaretVisible(this)"
-          autocorrect="off"
-          autocapitalize="off"
-          spellcheck="false"
-
-          autocomplete="new-password"
-data-lpignore="true"
+          autocomplete="off"
+autocorrect="off"
+autocapitalize="off"
+spellcheck="false"
+inputmode="text"
 data-form-type="other"
-name="no-autofill"
         ></textarea>
 
         <button class="button" id="save-btn" onclick="saveRecipe()">
@@ -1053,7 +1062,7 @@ name="no-autofill"
         input.setAttribute("autocapitalize", "off");
         input.setAttribute("spellcheck", "false");
 
-        input.setAttribute("autocomplete", "new-password");
+        input.setAttribute("autocomplete", "off");
         input.setAttribute("data-lpignore", "true");
         input.setAttribute("data-form-type", "other");
         input.setAttribute("name", "no-autofill");
@@ -1151,19 +1160,19 @@ function handleKeyboardViewport() {
     `${keyboardHeight}px`
   );
 
-  const active = document.activeElement;
+  // const active = document.activeElement;
 
-  if (
-    active &&
-    (active.tagName === "TEXTAREA" || active.tagName === "INPUT")
-  ) {
-    setTimeout(() => {
-      active.scrollIntoView({
-        block: "center",
-        behavior: "instant",
-      });
-    }, 50);
-  }
+  // if (
+  //   active &&
+  //   (active.tagName === "TEXTAREA" || active.tagName === "INPUT")
+  // ) {
+  //   setTimeout(() => {
+  //     active.scrollIntoView({
+  //       block: "center",
+  //       behavior: "instant",
+  //     });
+  //   }, 50);
+  // }
 }
 
 if (window.visualViewport) {
@@ -1173,25 +1182,28 @@ if (window.visualViewport) {
 
 function keepCaretVisible(el) {
   requestAnimationFrame(() => {
-    const rect = el.getBoundingClientRect();
+    const caret = el.selectionStart;
 
-    const viewportHeight =
-      window.visualViewport?.height || window.innerHeight;
+    const textBefore = el.value.substring(0, caret);
 
-    const targetBottom = viewportHeight - 120;
+    const lines = textBefore.split("\n").length;
 
-    if (rect.bottom > targetBottom) {
-      window.scrollBy({
-        top: rect.bottom - targetBottom,
-        behavior: "instant",
-      });
+    const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
+
+    const caretY = lines * lineHeight;
+
+    const visibleTop = el.scrollTop;
+
+    const visibleBottom = visibleTop + el.clientHeight;
+
+    const margin = lineHeight * 2;
+
+    if (caretY + margin > visibleBottom) {
+      el.scrollTop = caretY - el.clientHeight + margin;
     }
 
-    if (rect.top < 80) {
-      window.scrollBy({
-        top: rect.top - 80,
-        behavior: "instant",
-      });
+    if (caretY - margin < visibleTop) {
+      el.scrollTop = Math.max(0, caretY - margin);
     }
   });
 }
