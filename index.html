@@ -156,16 +156,6 @@
         -webkit-overflow-scrolling: touch;
       }
 
-      input::-webkit-contacts-auto-fill-button,
-      input::-webkit-credentials-auto-fill-button {
-        visibility: hidden;
-        display: none !important;
-        pointer-events: none;
-        height: 0;
-        width: 0;
-        margin: 0;
-      }
-
       .readonly-box {
         background-color: var(--readonly-bg) !important;
         color: var(--readonly-text);
@@ -529,7 +519,7 @@
       />
 
       <div class="search-group">
-        <input
+        <textarea
           type="text"
           id="search-input"
           class="input search-input"
@@ -584,7 +574,7 @@
         </h2>
 
         <div class="label">שם המתכון</div>
-        <input
+        <textarea
           type="text"
           id="recipe-name"
           class="input"
