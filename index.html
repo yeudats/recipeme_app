@@ -45,7 +45,8 @@
 
       html {
         height: 100%;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
 
         background: linear-gradient(
           135deg,
@@ -72,7 +73,7 @@
   background: transparent;
 
   width: 100%;
-  height: calc(var(--vh, 1vh) * 100);
+  min-height: calc(var(--vh, 1vh) * 100);
 
   overflow-x: hidden;
   overflow-y: auto;
@@ -455,7 +456,7 @@
         display: none;
         opacity: 0;
         width: 100%;
-        min-height: calc(var(--vh, 1vh) * 100);
+        /* min-height: calc(var(--vh, 1vh) * 100); */
         transition: opacity 0.25s ease;
         flex-direction: column;
         align-items: center;
@@ -467,6 +468,7 @@
         display: flex;
         opacity: 1;
         pointer-events: auto;
+        min-height: calc(var(--vh, 1vh) * 100);
       }
 
       /* .keyboard-open .page-container {
@@ -1088,12 +1090,10 @@
       }
 
       function autoResize(el) {
-        const prev = window.scrollY;
-        console.log("a", el.scrollHeight);
+        // const prev = window.scrollY;
         el.style.height = "auto";
         el.style.height = el.scrollHeight + "px";
-        console.log("aa", el.style.height);
-        window.scrollTo(0, prev);
+        // window.scrollTo(0, prev);
       }
 
       document.addEventListener(
@@ -1175,8 +1175,6 @@ function handleKeyboardState() {
 
     document.body.classList.toggle("keyboard-open", keyboardOpen);
   }
-
-  updateViewportHeight();
 }
 
 function updateViewportHeight() {
