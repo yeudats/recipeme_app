@@ -44,31 +44,42 @@
       }
 
       html {
-        min-height: 100dvh;
+        height: 100%;
+        overflow: hidden;
+
         background: linear-gradient(
           135deg,
           #fef9c3 0%,
           #e0f2fe 50%,
           #f3e8ff 100%
         );
+
         background-repeat: no-repeat;
         background-size: cover;
+        background-attachment: fixed;
       }
 
       body {
-        margin: 0;
-        color: var(--text-main);
-        overflow-x: hidden;
-        overflow-y: auto;
+  margin: 0;
+  color: var(--text-main);
 
-        font-family:
-          "Segoe UI",
-          system-ui,
-          -apple-system,
-          sans-serif;
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    sans-serif;
 
-        background: transparent;
-      }
+  background: transparent;
+
+  width: 100%;
+  height: calc(var(--vh, 1vh) * 100);
+
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
 
       .page-container {
         display: flex;
@@ -78,6 +89,7 @@
         max-width: 500px;
         margin: 2rem auto 2rem auto;
         padding: 1.5rem;
+        padding-bottom: 2rem;
         background-color: var(--container-bg);
         backdrop-filter: blur(8px);
         border-radius: 1.2rem;
@@ -142,7 +154,6 @@
         -webkit-user-select: text !important;
         -ms-user-select: text !important;
         font-family: inherit;
-        transition: padding 0.3s ease; /* מעבר חלק כשהמקלדת עולה/יורדת */
       }
 
       .input:focus,
@@ -444,7 +455,7 @@
         display: none;
         opacity: 0;
         width: 100%;
-        min-height: 100%;
+        min-height: calc(var(--vh, 1vh) * 100);
         transition: opacity 0.25s ease;
         flex-direction: column;
         align-items: center;
@@ -457,6 +468,22 @@
         opacity: 1;
         pointer-events: auto;
       }
+
+      .keyboard-open .page-container {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.keyboard-open .logo-home {
+  width: 120px;
+  height: 120px;
+  margin: 1rem auto;
+}
+
+.keyboard-open #view-home {
+  justify-content: flex-start;
+}
     </style>
   </head>
   <body>
@@ -1130,6 +1157,30 @@
 updateViewportHeight();
 
 window.addEventListener("resize", updateViewportHeight);
+
+let keyboardOpen = false;
+
+function handleKeyboardState() {
+  const viewportHeight = window.visualViewport
+    ? window.visualViewport.height
+    : window.innerHeight;
+
+  const fullHeight = window.screen.height;
+
+  const isKeyboardNowOpen = viewportHeight < fullHeight * 0.75;
+
+  if (isKeyboardNowOpen !== keyboardOpen) {
+    keyboardOpen = isKeyboardNowOpen;
+
+    document.body.classList.toggle("keyboard-open", keyboardOpen);
+  }
+}
+
+if (window.visualViewport) {
+  visualViewport.addEventListener("resize", handleKeyboardState);
+}
+
+window.addEventListener("resize", handleKeyboardState);
     </script>
 
     <script>
