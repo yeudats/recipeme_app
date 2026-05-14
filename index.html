@@ -478,11 +478,15 @@
 .keyboard-open .logo-home {
   width: 120px;
   height: 120px;
-  margin: 1rem auto;
+  margin: 4rem auto;
 }
 
 .keyboard-open #view-home {
   justify-content: flex-start;
+}
+
+body.keyboard-open {
+  overflow-y: auto;
 }
     </style>
   </head>
@@ -1147,16 +1151,16 @@
         });
       }
 
-      function updateViewportHeight() {
-  document.documentElement.style.setProperty(
-    "--vh",
-    `${window.innerHeight * 0.01}px`,
-  );
-}
+//       function updateViewportHeight() {
+//   document.documentElement.style.setProperty(
+//     "--vh",
+//     `${window.innerHeight * 0.01}px`,
+//   );
+// }
 
-updateViewportHeight();
+// updateViewportHeight();
 
-window.addEventListener("resize", updateViewportHeight);
+// window.addEventListener("resize", updateViewportHeight);
 
 let keyboardOpen = false;
 
@@ -1174,13 +1178,35 @@ function handleKeyboardState() {
 
     document.body.classList.toggle("keyboard-open", keyboardOpen);
   }
+
+  updateViewportHeight();
 }
+
+function updateViewportHeight() {
+  const height = window.visualViewport
+    ? window.visualViewport.height
+    : window.innerHeight;
+
+  document.documentElement.style.setProperty(
+    "--vh",
+    `${height * 0.01}px`,
+  );
+}
+
+updateViewportHeight();
+handleKeyboardState();
 
 if (window.visualViewport) {
-  visualViewport.addEventListener("resize", handleKeyboardState);
+  visualViewport.addEventListener("resize", () => {
+    updateViewportHeight();
+    handleKeyboardState();
+  });
 }
 
-window.addEventListener("resize", handleKeyboardState);
+window.addEventListener("resize", () => {
+  updateViewportHeight();
+  handleKeyboardState();
+});
     </script>
 
     <script>
