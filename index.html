@@ -57,7 +57,7 @@
 
         background-repeat: no-repeat;
         background-size: cover;
-        background-attachment: fixed;
+        /* background-attachment: fixed; */
       }
 
       body {
@@ -469,7 +469,7 @@
         display: flex;
         opacity: 1;
         pointer-events: auto;
-        min-height: calc(var(--vh, 1vh) * 100);
+        min-height: 100dvh;
       }
 
       /* .keyboard-open .page-container {
@@ -1224,31 +1224,37 @@
         }
       }
 
-      function updateViewportHeight() {
-        const height = window.visualViewport
-          ? window.visualViewport.height
-          : window.innerHeight;
+      // function updateViewportHeight() {
+      //   const height = window.visualViewport
+      //     ? window.visualViewport.height
+      //     : window.innerHeight;
 
-        document.documentElement.style.setProperty(
-          "--vh",
-          `${height * 0.01}px`,
-        );
-      }
+      //   document.documentElement.style.setProperty(
+      //     "--vh",
+      //     `${height * 0.01}px`,
+      //   );
+      // }
 
-      updateViewportHeight();
-      handleKeyboardState();
+      // updateViewportHeight();
+      // handleKeyboardState();
+
+      // if (window.visualViewport) {
+      //   visualViewport.addEventListener("resize", () => {
+      //     updateViewportHeight();
+      //     handleKeyboardState();
+      //   });
+      // }
+
+      // window.addEventListener("resize", () => {
+      //   updateViewportHeight();
+      //   handleKeyboardState();
+      // });
 
       if (window.visualViewport) {
-        visualViewport.addEventListener("resize", () => {
-          updateViewportHeight();
-          handleKeyboardState();
-        });
-      }
+  visualViewport.addEventListener("resize", handleKeyboardState);
+}
 
-      window.addEventListener("resize", () => {
-        updateViewportHeight();
-        handleKeyboardState();
-      });
+window.addEventListener("resize", handleKeyboardState);
     </script>
 
     <script>
