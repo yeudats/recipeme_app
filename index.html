@@ -76,7 +76,7 @@
         min-height: calc(var(--vh, 1vh) * 100);
 
         overflow-x: hidden;
-        overflow-y: auto;
+        overflow-y: hidden;
 
         /* overscroll-behavior: none; */
         -webkit-overflow-scrolling: touch;
@@ -132,6 +132,7 @@
 
       .input {
         height: 55px;
+        min-height: 55px;
         padding-right: 1rem;
         padding-left: 1rem;
         align-content: center;
@@ -841,7 +842,8 @@
         nextView.style.display = "flex";
         void nextView.offsetWidth;
         nextView.classList.add("active");
-        window.scrollTo(0, 0);
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
         if (viewId === "view-recipe") {
           autoResize(document.getElementById("display-method"));
         }
@@ -1034,9 +1036,15 @@
       function renderIngredients() {
         const container = document.getElementById("ingredients-list");
         container.innerHTML = "";
-        groceryList.forEach((item, index) =>
-          createIngredientInput(index, item),
-        );
+        groceryList.forEach((item, index) => {
+          createIngredientInput(index, item);
+        });
+
+        requestAnimationFrame(() => {
+          document.querySelectorAll(".ing-input").forEach((el) => {
+            autoResize(el);
+          });
+        });
       }
 
       function createIngredientInput(index, value) {
@@ -1094,6 +1102,7 @@
         };
 
         container.appendChild(input);
+        autoResize(input);
       }
 
       function autoResize(el) {
