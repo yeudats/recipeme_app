@@ -1040,11 +1040,11 @@
           createIngredientInput(index, item);
         });
 
-        requestAnimationFrame(() => {
-          document.querySelectorAll(".ing-input").forEach((el) => {
-            autoResize(el);
-          });
-        });
+        // requestAnimationFrame(() => {
+        //   document.querySelectorAll(".ing-input").forEach((el) => {
+        //     autoResize(el);
+        //   });
+        // });
       }
 
       function createIngredientInput(index, value) {
@@ -1052,6 +1052,7 @@
         const input = document.createElement("textarea");
         input.type = "text";
         input.className = "input ing-input";
+        input.dataset.index = index;
         input.value = value;
         input.placeholder = index === 0 ? "הוסף מצרך ראשון" : "הוסף מצרך נוסף";
 
@@ -1066,13 +1067,15 @@
         input.setAttribute("name", "no-autofill");
 
         input.oninput = (e) => {
-          groceryList[index] = e.target.value;
+          const currentIndex = Number(input.dataset.index);
+
+          groceryList[currentIndex] = e.target.value;
 
           autoResize(e.target);
           keepCaretVisible(e.target);
 
           if (
-            index === groceryList.length - 1 &&
+            currentIndex === groceryList.length - 1 &&
             e.target.value.trim() !== ""
           ) {
             groceryList.push("");
@@ -1081,23 +1084,43 @@
         };
 
         input.onkeydown = (e) => {
+          const currentIndex = Number(input.dataset.index);
+
           if (e.key === "Enter" || e.key === "Tab") {
-            if (e.key === "Enter") e.preventDefault();
+            if (e.key === "Enter") {
+              e.preventDefault();
+            }
+
             const allInputs = container.querySelectorAll(".ing-input");
-            if (allInputs[index + 1]) allInputs[index + 1].focus();
+
+            if (allInputs[currentIndex + 1]) {
+              allInputs[currentIndex + 1].focus();
+            }
           }
         };
 
         input.onblur = (e) => {
-          const val = e.target.value.trim();
-          groceryList[index] = val;
-          if (
-            val === "" &&
-            index !== groceryList.length - 1 &&
-            groceryList.length > 1
-          ) {
-            groceryList.splice(index, 1);
-            renderIngredients();
+          const inputEl = e.target;
+
+          const currentIndex = Number(inputEl.dataset.index);
+          const val = inputEl.value.trim();
+
+          groceryList[currentIndex] = val;
+
+          const isNotLast = currentIndex !== groceryList.length - 1;
+          const hasMoreThanOne = groceryList.length > 1;
+
+          if (val === "" && isNotLast && hasMoreThanOne) {
+            // מחיקה מהמערך
+            groceryList.splice(currentIndex, 1);
+
+            // מחיקה מה־DOM
+            inputEl.remove();
+
+            // עדכון אינדקסים לכל השדות שנשארו
+            container.querySelectorAll(".ing-input").forEach((el, i) => {
+              el.dataset.index = i;
+            });
           }
         };
 
