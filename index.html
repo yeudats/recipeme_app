@@ -469,7 +469,7 @@
         display: flex;
         opacity: 1;
         pointer-events: auto;
-        min-height: 100%;
+        min-height: 100dvh;
       }
 
       /* .keyboard-open .page-container {
@@ -842,7 +842,8 @@
         nextView.style.display = "flex";
         void nextView.offsetWidth;
         nextView.classList.add("active");
-        document.getElementsByTagName("body")[0].scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+document.body.scrollTop = 0;
         if (viewId === "view-recipe") {
           autoResize(document.getElementById("display-method"));
         }
