@@ -61,26 +61,26 @@
       }
 
       body {
-  margin: 0;
-  color: var(--text-main);
+        margin: 0;
+        color: var(--text-main);
 
-  font-family:
-    "Segoe UI",
-    system-ui,
-    -apple-system,
-    sans-serif;
+        font-family:
+          "Segoe UI",
+          system-ui,
+          -apple-system,
+          sans-serif;
 
-  background: transparent;
+        background: transparent;
 
-  width: 100%;
-  min-height: calc(var(--vh, 1vh) * 100);
+        width: 100%;
+        min-height: calc(var(--vh, 1vh) * 100);
 
-  overflow-x: hidden;
-  overflow-y: auto;
+        overflow-x: hidden;
+        overflow-y: auto;
 
-  /* overscroll-behavior: none; */
-  -webkit-overflow-scrolling: touch;
-}
+        /* overscroll-behavior: none; */
+        -webkit-overflow-scrolling: touch;
+      }
 
       .page-container {
         display: flex;
@@ -88,7 +88,7 @@
         align-items: center;
         width: 85%;
         max-width: 500px;
-        margin: 2rem auto 2rem auto;
+        margin: 0 auto;
         padding: 1.5rem;
         padding-bottom: 2rem;
         background-color: var(--container-bg);
@@ -148,7 +148,6 @@
         overflow: hidden;
         box-sizing: border-box;
         background: #fff;
-        box-sizing: border-box;
         outline: none;
         transition: all 0.3s ease;
         user-select: text !important;
@@ -257,7 +256,6 @@
         justify-content: flex-end;
 
       } */
-      
 
       .logo-home {
         width: 250px;
@@ -406,7 +404,7 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 100dvh;
+        height: calc(var(--vh, 1vh) * 100);
       }
       .cooking-pot {
         width: 60px;
@@ -456,6 +454,8 @@
         display: none;
         opacity: 0;
         width: 100%;
+        padding: 2rem 0;
+        box-sizing: border-box;
         /* min-height: calc(var(--vh, 1vh) * 100); */
         transition: opacity 0.25s ease;
         flex-direction: column;
@@ -477,16 +477,15 @@
   padding-bottom: 0.5rem !important;
 } */
 
- .keyboard-open .logo-home {
-  width: 120px;
-  height: 120px;
-  margin: 4rem auto;
-}
+      .keyboard-open .logo-home {
+        width: 120px;
+        height: 120px;
+        margin: 4rem auto;
+      }
 
-/* .keyboard-open #view-home {
+      /* .keyboard-open #view-home {
   justify-content: flex-start;
 } */
-
     </style>
   </head>
   <body>
@@ -534,7 +533,6 @@
 
       <div class="search-group">
         <textarea
-          type="text"
           id="search-input"
           class="input search-input"
           placeholder="חפש מתכון..."
@@ -552,7 +550,7 @@
         <button
           class="button search-button"
           onclick="
-            searchRecipes(document.getElementById('search-input').value);
+            searchRecipesLocal(document.getElementById('search-input').value);
             setTimeout(() => {
               document.getElementById('search-input').value = '';
             }, 750);
@@ -593,7 +591,6 @@
 
         <div class="label">שם המתכון</div>
         <textarea
-          type="text"
           id="recipe-name"
           class="input"
           placeholder="למשל: עוגת שוקולד"
@@ -670,6 +667,7 @@
       let currentRecipeName = "";
       let groceryList = [""];
       let isEditMode = false; // מעקב אם אנחנו בעריכה או בהוספה
+      let lastSearchQuery = "";
 
       function loadFromCache() {
         try {
@@ -705,7 +703,6 @@
         }
       }
 
-
       window.onload = () => {
         loadFromCache();
         backgroundSync();
@@ -729,8 +726,7 @@
             if (e.key === "Enter") {
               e.preventDefault();
 
-              const firstIngredient =
-                document.querySelector(".ing-input");
+              const firstIngredient = document.querySelector(".ing-input");
 
               if (firstIngredient) {
                 firstIngredient.focus();
@@ -872,13 +868,25 @@
         return text;
       }
 
+      function normalizeHebrew(str) {
+        return str
+          .replace(/ך/g, "כ")
+          .replace(/ם/g, "מ")
+          .replace(/ן/g, "נ")
+          .replace(/ף/g, "פ")
+          .replace(/ץ/g, "צ");
+      }
+
       // חיפוש כולל תמיכה בנקודה (.)
       function searchRecipesLocal(query) {
+        lastSearchQuery = query;
         const term = query.trim();
         let results = cachedRecipes;
 
         if (term && term !== ".") {
-          results = cachedRecipes.filter((r) => r.name.includes(term));
+          results = cachedRecipes.filter((r) =>
+            normalizeHebrew(r.name).includes(normalizeHebrew(term)),
+          );
           results.sort((a, b) => a.name.indexOf(term) - b.name.indexOf(term));
         }
 
@@ -906,10 +914,6 @@
         navigateTo("view-search", false);
       }
 
-      function searchRecipes(query) {
-        searchRecipesLocal(query);
-      }
-
       function renderRecipeData(recipe) {
         currentRecipeName = recipe.name;
         document.getElementById("display-name").innerHTML = createMarqueeText(
@@ -924,6 +928,11 @@
         const name = document.getElementById("recipe-name").value.trim();
         const method = document.getElementById("recipe-method").value.trim();
         const ingredients = groceryList.filter((item) => item.trim() !== "");
+
+        if (!isEditMode && cachedRecipes.some((r) => r.name === name)) {
+          showToast("כבר קיים מתכון בשם הזה");
+          return;
+        }
 
         if (!name || !method || ingredients.length === 0) {
           showToast("חובה למלא שם, מצרכים ואופן הכנה");
@@ -990,17 +999,15 @@
         const recipeIndex = cachedRecipes.findIndex(
           (r) => r.name === nameToDelete,
         );
+        if (recipeIndex === -1) return;
         const backupRecipe = cachedRecipes[recipeIndex];
 
         cachedRecipes.splice(recipeIndex, 1);
         saveToCache();
         showToast("המתכון נמחק");
 
-        // ניקוי תוצאות החיפוש כדי שאם המשתמש יחזור אחורה הוא לא יראה את המחוק
-        const searchInput = document.getElementById("search-input");
-        if (searchInput.value.trim() !== "") {
-          searchRecipesLocal(searchInput.value); // מרנדר מחדש את החיפוש ללא המתכון שמחקנו
-        }
+        // רענון דף החיפוש כדי להסיר את המתכון שנמחק
+        searchRecipesLocal(lastSearchQuery);
 
         navigateTo("view-home", true);
         window.location.href = "#home"; // מאפס לגמרי את המעבר קדימה
@@ -1052,16 +1059,16 @@
 
         input.oninput = (e) => {
           groceryList[index] = e.target.value;
+
+          autoResize(e.target);
+          keepCaretVisible(e.target);
+
           if (
             index === groceryList.length - 1 &&
             e.target.value.trim() !== ""
           ) {
             groceryList.push("");
             createIngredientInput(groceryList.length - 1, "");
-          }
-          else {
-            autoResize(e.target);
-            keepCaretVisible(e.target);
           }
         };
 
@@ -1126,82 +1133,90 @@
         false,
       );
 
-
       function keepCaretVisible(el) {
         requestAnimationFrame(() => {
-          const caret = el.selectionStart;
-          const textBefore = el.value.substring(0, caret);
-          const lines = textBefore.split("\n").length;
-          const lineHeight = parseFloat(getComputedStyle(el).lineHeight);
-          const caretY = lines * lineHeight;
-          const visibleTop = el.scrollTop;
-          const visibleBottom = visibleTop + el.clientHeight;
-          const margin = lineHeight * 2;
+          const caretPos = el.selectionEnd;
 
-          if (caretY + margin > visibleBottom) {
-            el.scrollTop = caretY - el.clientHeight + margin;
+          const temp = document.createElement("div");
+          const style = getComputedStyle(el);
+
+          for (const prop of style) {
+            temp.style[prop] = style[prop];
           }
 
-          if (caretY - margin < visibleTop) {
-            el.scrollTop = Math.max(0, caretY - margin);
+          temp.style.position = "absolute";
+          temp.style.visibility = "hidden";
+          temp.style.whiteSpace = "pre-wrap";
+          temp.style.wordWrap = "break-word";
+          temp.style.width = `${el.clientWidth}px`;
+
+          temp.textContent = el.value.substring(0, caretPos);
+
+          const span = document.createElement("span");
+          span.textContent = "|";
+
+          temp.appendChild(span);
+          document.body.appendChild(temp);
+
+          const caretTop = span.offsetTop;
+
+          document.body.removeChild(temp);
+
+          const padding = 40;
+
+          if (caretTop > el.scrollTop + el.clientHeight - padding) {
+            el.scrollTop = caretTop - el.clientHeight + padding;
+          }
+
+          if (caretTop < el.scrollTop + padding) {
+            el.scrollTop = Math.max(0, caretTop - padding);
           }
         });
       }
 
-//       function updateViewportHeight() {
-//   document.documentElement.style.setProperty(
-//     "--vh",
-//     `${window.innerHeight * 0.01}px`,
-//   );
-// }
+      let keyboardOpen = false;
 
-// updateViewportHeight();
+      function handleKeyboardState() {
+        const viewportHeight = window.visualViewport
+          ? window.visualViewport.height
+          : window.innerHeight;
 
-// window.addEventListener("resize", updateViewportHeight);
+        const fullHeight = window.screen.height;
 
-let keyboardOpen = false;
+        const isKeyboardNowOpen = viewportHeight < fullHeight * 0.75;
 
-function handleKeyboardState() {
-  const viewportHeight = window.visualViewport
-    ? window.visualViewport.height
-    : window.innerHeight;
+        if (isKeyboardNowOpen !== keyboardOpen) {
+          keyboardOpen = isKeyboardNowOpen;
 
-  const fullHeight = window.screen.height;
+          document.body.classList.toggle("keyboard-open", keyboardOpen);
+        }
+      }
 
-  const isKeyboardNowOpen = viewportHeight < fullHeight * 0.75;
+      function updateViewportHeight() {
+        const height = window.visualViewport
+          ? window.visualViewport.height
+          : window.innerHeight;
 
-  if (isKeyboardNowOpen !== keyboardOpen) {
-    keyboardOpen = isKeyboardNowOpen;
+        document.documentElement.style.setProperty(
+          "--vh",
+          `${height * 0.01}px`,
+        );
+      }
 
-    document.body.classList.toggle("keyboard-open", keyboardOpen);
-  }
-}
+      updateViewportHeight();
+      handleKeyboardState();
 
-function updateViewportHeight() {
-  const height = window.visualViewport
-    ? window.visualViewport.height
-    : window.innerHeight;
+      if (window.visualViewport) {
+        visualViewport.addEventListener("resize", () => {
+          updateViewportHeight();
+          handleKeyboardState();
+        });
+      }
 
-  document.documentElement.style.setProperty(
-    "--vh",
-    `${height * 0.01}px`,
-  );
-}
-
-// updateViewportHeight();
-handleKeyboardState();
-
-if (window.visualViewport) {
-  visualViewport.addEventListener("resize", () => {
-    updateViewportHeight();
-    handleKeyboardState();
-  });
-}
-
-window.addEventListener("resize", () => {
-  updateViewportHeight();
-  handleKeyboardState();
-});
+      window.addEventListener("resize", () => {
+        updateViewportHeight();
+        handleKeyboardState();
+      });
     </script>
 
     <script>
