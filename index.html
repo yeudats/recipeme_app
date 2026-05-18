@@ -46,8 +46,9 @@
       html {
         min-height: 100%;
         overflow-x: hidden;
-        overflow-y: auto;
-        overscroll-behavior: none;
+        overflow-y: hidden;
+        overscroll-behavior-y: none;
+        /* overscroll-behavior: none; */
         background: linear-gradient(
           135deg,
           #fef9c3 0%,
@@ -74,8 +75,7 @@
         width: 100%;
 
         overflow-x: hidden;
-        overflow-y: auto;
-        overscroll-behavior: none;
+        overflow-y: hidden;
         -webkit-overflow-scrolling: touch;
       }
 
@@ -456,6 +456,7 @@
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
       }
 
       .view.active {
