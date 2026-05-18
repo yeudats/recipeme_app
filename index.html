@@ -58,7 +58,6 @@
 
         background-repeat: no-repeat;
         background-size: cover;
-        /* background-attachment: fixed; */
       }
 
       body {
@@ -74,10 +73,9 @@
         background: transparent;
 
         width: 100%;
-        /* min-height: calc(var(--vh, 1vh) * 100); */
 
         overflow-x: hidden;
-        overflow-y: hidden;
+        overflow-y: auto;
         /* overscroll-behavior: none; */
         -webkit-overflow-scrolling: touch;
       }
@@ -459,7 +457,6 @@
         overflow-x: hidden;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
-        overscroll-behavior-y: contain;
       }
 
       .view.active {
@@ -824,7 +821,7 @@
         void nextView.offsetWidth;
         nextView.classList.add("active");
         document.documentElement.scrollTop = 0;
-document.body.scrollTop = 0;
+        document.body.scrollTop = 0;
         if (viewId === "view-recipe") {
           autoResize(document.getElementById("display-method"));
         }
@@ -1232,10 +1229,10 @@ document.body.scrollTop = 0;
       // });
 
       if (window.visualViewport) {
-  visualViewport.addEventListener("resize", handleKeyboardState);
-}
+        visualViewport.addEventListener("resize", handleKeyboardState);
+      }
 
-window.addEventListener("resize", handleKeyboardState);
+      window.addEventListener("resize", handleKeyboardState);
     </script>
 
     <script>
