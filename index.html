@@ -77,8 +77,8 @@
 
         overflow-x: hidden;
         overflow-y: hidden;
-        overscroll-behavior: none;
-        /* overscroll-behavior: none; */
+        overscroll-behavior-x: none;
+        overscroll-behavior-y: contain;
         -webkit-overflow-scrolling: touch;
       }
 
@@ -88,7 +88,7 @@
         align-items: center;
         width: 85%;
         max-width: 500px;
-        margin: 0 auto;
+        margin: 2rem auto;
         padding: 1.5rem;
         padding-bottom: 2rem;
         background-color: var(--container-bg);
@@ -117,11 +117,7 @@
         text-decoration: none;
         text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
         z-index: 10;
-      }
-
-      #view-home .button {
-        /* margin-bottom: 1vh; */
-        bottom: 10%;
+        flex-shrink: 0;
       }
 
       .button:hover,
@@ -250,21 +246,13 @@
         pointer-events: none;
       }
 
-      /* #view-home {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-end;
-
-      } */
-
       .logo-home {
         width: clamp(120px, 35vh, 250px);
         aspect-ratio: 1 / 1;
         display: block;
 
-        margin-top: clamp(0rem, 20vh, 8rem);
-        margin-bottom: clamp(2rem, 20vh, 8rem);
+        margin-top: clamp(0rem, min(15vh, 20vw), 6rem);
+        margin-bottom: clamp(0rem, min(15vh, 20vw), 6rem);
         margin-left: auto;
         margin-right: auto;
         border-radius: 50%;
@@ -461,8 +449,6 @@
         opacity: 0;
         width: 100%;
         height: 100%;
-        padding-top: 2rem;
-        padding-bottom: 2rem;
         box-sizing: border-box;
         transition: opacity 0.25s ease;
         flex-direction: column;
@@ -480,25 +466,8 @@
         display: flex;
         opacity: 1;
         pointer-events: auto;
-        /* min-height: calc(100% - 4rem); */
         box-sizing: border-box;
       }
-
-      /* .keyboard-open .page-container {
-  margin-top: 0.5rem !important;
-  margin-bottom: 0.5rem !important;
-  padding-bottom: 0.5rem !important;
-} */
-
-      /* .keyboard-open .logo-home {
-        width: 120px;
-        height: 120px;
-        margin: 4rem auto;
-      } */
-
-      /* .keyboard-open #view-home {
-  justify-content: flex-start;
-} */
     </style>
   </head>
   <body>
