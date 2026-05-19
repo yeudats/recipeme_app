@@ -8,10 +8,10 @@
     />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <!-- <meta
+    <meta
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
-    /> -->
+    />
     <link rel="apple-touch-icon" href="icon.png" />
     <link rel="manifest" href="manifest.json" />
 
@@ -78,6 +78,14 @@
         overscroll-behavior: none;
         -webkit-overflow-scrolling: touch;
       }
+      html,
+body {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 
       .page-container {
         display: flex;
@@ -85,7 +93,8 @@
         align-items: center;
         width: 85%;
         max-width: 500px;
-        margin: 2rem auto;
+        margin-top: max(2rem, env(safe-area-inset-top));
+  margin-bottom: max(2rem, env(safe-area-inset-bottom));
         padding: 1.5rem;
         padding-bottom: 2rem;
         background-color: var(--container-bg);
@@ -445,19 +454,19 @@
         display: none;
         opacity: 0;
         width: 100%;
-        height: 100%;
+        /* height: 100%; */
         box-sizing: border-box;
         transition: opacity 0.25s ease;
         flex-direction: column;
         align-items: center;
-        position: absolute;
+        position: fixed;
         inset: 0;
         pointer-events: none;
         overflow-x: hidden;
         overflow-y: auto;
-        overscroll-behavior: none;
+        /* overscroll-behavior: none; */
         -webkit-overflow-scrolling: touch;
-        /* overscroll-behavior-y: contain; */
+        overscroll-behavior-y: contain;
       }
 
       .view.active {
@@ -1192,8 +1201,9 @@
           ? window.visualViewport.height
           : window.innerHeight;
 
-        const fullHeight = window.screen.height;
-
+        // const fullHeight = window.screen.height;
+        const fullHeight = document.documentElement.clientHeight;
+        
         const isKeyboardNowOpen = viewportHeight < fullHeight * 0.75;
 
         if (isKeyboardNowOpen !== keyboardOpen) {
