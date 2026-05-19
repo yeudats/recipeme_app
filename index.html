@@ -47,7 +47,7 @@
         min-height: 100%;
         overflow-x: hidden;
         overflow-y: auto;
-        overscroll-behavior: none;
+        /* overscroll-behavior: none; */
         background: linear-gradient(
           135deg,
           #fef9c3 0%,
@@ -75,7 +75,7 @@
 
         overflow-x: hidden;
         overflow-y: auto;
-        overscroll-behavior: none;
+        /* overscroll-behavior: none; */
         -webkit-overflow-scrolling: touch;
       }
 
@@ -86,7 +86,7 @@
         width: 85%;
         max-width: 500px;
         margin-top: max(2rem, env(safe-area-inset-top));
-  margin-bottom: max(2rem, env(safe-area-inset-bottom));
+        margin-bottom: max(2rem, env(safe-area-inset-bottom));
         padding: 1.5rem;
         padding-bottom: 2rem;
         background-color: var(--container-bg);
@@ -118,8 +118,7 @@
         flex-shrink: 0;
       }
 
-      .button:hover,
-      .button:active {
+      .button:hover {
         transform: scale(1.02);
         box-shadow: 0 4px 12px rgba(253, 160, 133, 0.4);
       }
@@ -457,8 +456,8 @@
         overflow-x: hidden;
         overflow-y: auto;
         /* overscroll-behavior: none; */
+        /* overscroll-behavior-y: contain; */
         -webkit-overflow-scrolling: touch;
-        overscroll-behavior-y: contain;
       }
 
       .view.active {
