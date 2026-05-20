@@ -1211,37 +1211,37 @@
         }
       }
 
-      // function updateViewportHeight() {
-      //   const height = window.visualViewport
-      //     ? window.visualViewport.height
-      //     : window.innerHeight;
+      function updateViewportHeight() {
+        const height = window.visualViewport
+          ? window.visualViewport.height
+          : window.innerHeight;
 
-      //   document.documentElement.style.setProperty(
-      //     "--vh",
-      //     `${height * 0.01}px`,
-      //   );
-      // }
-
-      // updateViewportHeight();
-      // handleKeyboardState();
-
-      // if (window.visualViewport) {
-      //   visualViewport.addEventListener("resize", () => {
-      //     updateViewportHeight();
-      //     handleKeyboardState();
-      //   });
-      // }
-
-      // window.addEventListener("resize", () => {
-      //   updateViewportHeight();
-      //   handleKeyboardState();
-      // });
-
-      if (window.visualViewport) {
-        visualViewport.addEventListener("resize", handleKeyboardState);
+        document.documentElement.style.setProperty(
+          "--vh",
+          `${height * 0.01}px`,
+        );
       }
 
-      window.addEventListener("resize", handleKeyboardState);
+      updateViewportHeight();
+      handleKeyboardState();
+
+      if (window.visualViewport) {
+        visualViewport.addEventListener("resize", () => {
+          updateViewportHeight();
+          handleKeyboardState();
+        });
+      }
+
+      window.addEventListener("resize", () => {
+        updateViewportHeight();
+        handleKeyboardState();
+      });
+
+      // if (window.visualViewport) {
+      //   visualViewport.addEventListener("resize", handleKeyboardState);
+      // }
+
+      // window.addEventListener("resize", handleKeyboardState);
     </script>
 
     <script>
