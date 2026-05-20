@@ -88,12 +88,7 @@
         transition: opacity 0.25s ease;
         flex-direction: column;
         align-items: center;
-        /* position: fixed;
-        inset: 0; */
         pointer-events: none;
-        /* overflow-x: hidden;
-        overflow-y: hidden; */
-        /* -webkit-overflow-scrolling: touch; */
       }
 
       .view.active {
@@ -1114,8 +1109,10 @@
       }
 
       function autoResize(el) {
+        const scrollY = window.scrollY;
         el.style.height = "auto";
         el.style.height = el.scrollHeight + "px";
+         window.scrollTo(0, scrollY);
       }
 
       document.addEventListener(
@@ -1147,115 +1144,6 @@
         },
         false,
       );
-
-      // function keepCaretVisible(el) {
-      //   requestAnimationFrame(() => {
-      //     const caretPos = el.selectionEnd;
-
-      //     const temp = document.createElement("div");
-      //     const style = getComputedStyle(el);
-
-      //     for (const prop of style) {
-      //       temp.style[prop] = style[prop];
-      //     }
-
-      //     temp.style.position = "absolute";
-      //     temp.style.visibility = "hidden";
-      //     temp.style.whiteSpace = "pre-wrap";
-      //     temp.style.wordWrap = "break-word";
-      //     temp.style.width = `${el.clientWidth}px`;
-
-      //     temp.textContent = el.value.substring(0, caretPos);
-
-      //     const span = document.createElement("span");
-      //     span.textContent = "|";
-
-      //     temp.appendChild(span);
-      //     document.body.appendChild(temp);
-
-      //     const caretTop = span.offsetTop;
-
-      //     document.body.removeChild(temp);
-
-      //     const padding = 40;
-
-      //     if (caretTop > el.scrollTop + el.clientHeight - padding) {
-      //       el.scrollTop = caretTop - el.clientHeight + padding;
-      //     }
-
-      //     if (caretTop < el.scrollTop + padding) {
-      //       el.scrollTop = Math.max(0, caretTop - padding);
-      //     }
-      //   });
-      // }
-
-
-
-//       function handleKeyboardState() {
-//   if (!window.visualViewport) return;
-
-//   const activeView = document.querySelector(".view.active");
-//   if (activeView) {
-//     // משנים את הגובה של הדף הנוכחי שיהיה בדיוק בגובה הפנוי מעל המקלדת
-//     activeView.style.height = `${window.visualViewport.height}px`;
-//   }
-// }
-
-// // הפעלת הפונקציה בכל שינוי גודל (פתיחה/סגירה של מקלדת)
-// if (window.visualViewport) {
-//   window.visualViewport.addEventListener("resize", handleKeyboardState);
-// }
-
-      // let keyboardOpen = false;
-
-      // function handleKeyboardState() {
-      //   const viewportHeight = window.visualViewport
-      //     ? window.visualViewport.height
-      //     : window.innerHeight;
-
-      //   // const fullHeight = window.screen.height;
-      //   const fullHeight = document.documentElement.clientHeight;
-
-      //   const isKeyboardNowOpen = viewportHeight < fullHeight * 0.75;
-
-      //   if (isKeyboardNowOpen !== keyboardOpen) {
-      //     keyboardOpen = isKeyboardNowOpen;
-
-      //     document.body.classList.toggle("keyboard-open", keyboardOpen);
-      //   }
-      // }
-
-      // function updateViewportHeight() {
-      //   const height = window.visualViewport
-      //     ? window.visualViewport.height
-      //     : window.innerHeight;
-
-      //   document.documentElement.style.setProperty(
-      //     "--vh",
-      //     `${height * 0.01}px`,
-      //   );
-      // }
-
-      // updateViewportHeight();
-      // handleKeyboardState();
-
-      // if (window.visualViewport) {
-      //   visualViewport.addEventListener("resize", () => {
-      //     updateViewportHeight();
-      //     handleKeyboardState();
-      //   });
-      // }
-
-      // window.addEventListener("resize", () => {
-      //   updateViewportHeight();
-      //   handleKeyboardState();
-      // });
-
-      // if (window.visualViewport) {
-      //   visualViewport.addEventListener("resize", handleKeyboardState);
-      // }
-
-      // window.addEventListener("resize", handleKeyboardState);
     </script>
 
     <script>
