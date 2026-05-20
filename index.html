@@ -44,7 +44,10 @@
       }
 
       html {
-        min-height: 100dvh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        /* min-height: 100dvh; */
         height: 100%;
         overflow-x: hidden;
         overflow-y: auto;
@@ -525,7 +528,7 @@
           placeholder="חפש מתכון..."
           oninput="
             autoResize(this);
-            keepCaretVisible(this);
+            // keepCaretVisible(this);
           "
           autocomplete="off"
           autocorrect="off"
@@ -583,7 +586,7 @@
           placeholder="למשל: עוגת שוקולד"
           oninput="
             autoResize(this);
-            keepCaretVisible(this);
+            // keepCaretVisible(this);
           "
           autocomplete="off"
           autocorrect="off"
@@ -603,7 +606,7 @@
           placeholder="איך מכינים?"
           oninput="
             autoResize(this);
-            keepCaretVisible(this);
+            // keepCaretVisible(this);
           "
           autocomplete="off"
           autocorrect="off"
@@ -1058,7 +1061,7 @@
           groceryList[currentIndex] = e.target.value;
 
           autoResize(e.target);
-          keepCaretVisible(e.target);
+          // keepCaretVisible(e.target);
 
           if (
             currentIndex === groceryList.length - 1 &&
@@ -1151,46 +1154,46 @@
         false,
       );
 
-      function keepCaretVisible(el) {
-        requestAnimationFrame(() => {
-          const caretPos = el.selectionEnd;
+      // function keepCaretVisible(el) {
+      //   requestAnimationFrame(() => {
+      //     const caretPos = el.selectionEnd;
 
-          const temp = document.createElement("div");
-          const style = getComputedStyle(el);
+      //     const temp = document.createElement("div");
+      //     const style = getComputedStyle(el);
 
-          for (const prop of style) {
-            temp.style[prop] = style[prop];
-          }
+      //     for (const prop of style) {
+      //       temp.style[prop] = style[prop];
+      //     }
 
-          temp.style.position = "absolute";
-          temp.style.visibility = "hidden";
-          temp.style.whiteSpace = "pre-wrap";
-          temp.style.wordWrap = "break-word";
-          temp.style.width = `${el.clientWidth}px`;
+      //     temp.style.position = "absolute";
+      //     temp.style.visibility = "hidden";
+      //     temp.style.whiteSpace = "pre-wrap";
+      //     temp.style.wordWrap = "break-word";
+      //     temp.style.width = `${el.clientWidth}px`;
 
-          temp.textContent = el.value.substring(0, caretPos);
+      //     temp.textContent = el.value.substring(0, caretPos);
 
-          const span = document.createElement("span");
-          span.textContent = "|";
+      //     const span = document.createElement("span");
+      //     span.textContent = "|";
 
-          temp.appendChild(span);
-          document.body.appendChild(temp);
+      //     temp.appendChild(span);
+      //     document.body.appendChild(temp);
 
-          const caretTop = span.offsetTop;
+      //     const caretTop = span.offsetTop;
 
-          document.body.removeChild(temp);
+      //     document.body.removeChild(temp);
 
-          const padding = 40;
+      //     const padding = 40;
 
-          if (caretTop > el.scrollTop + el.clientHeight - padding) {
-            el.scrollTop = caretTop - el.clientHeight + padding;
-          }
+      //     if (caretTop > el.scrollTop + el.clientHeight - padding) {
+      //       el.scrollTop = caretTop - el.clientHeight + padding;
+      //     }
 
-          if (caretTop < el.scrollTop + padding) {
-            el.scrollTop = Math.max(0, caretTop - padding);
-          }
-        });
-      }
+      //     if (caretTop < el.scrollTop + padding) {
+      //       el.scrollTop = Math.max(0, caretTop - padding);
+      //     }
+      //   });
+      // }
 
       let keyboardOpen = false;
 
@@ -1199,8 +1202,8 @@
           ? window.visualViewport.height
           : window.innerHeight;
 
-        const fullHeight = window.screen.height;
-        // const fullHeight = document.documentElement.clientHeight;
+        // const fullHeight = window.screen.height;
+        const fullHeight = document.documentElement.clientHeight;
 
         const isKeyboardNowOpen = viewportHeight < fullHeight * 0.75;
 
@@ -1211,37 +1214,37 @@
         }
       }
 
-      function updateViewportHeight() {
-        const height = window.visualViewport
-          ? window.visualViewport.height
-          : window.innerHeight;
+      // function updateViewportHeight() {
+      //   const height = window.visualViewport
+      //     ? window.visualViewport.height
+      //     : window.innerHeight;
 
-        document.documentElement.style.setProperty(
-          "--vh",
-          `${height * 0.01}px`,
-        );
-      }
-
-      updateViewportHeight();
-      handleKeyboardState();
-
-      if (window.visualViewport) {
-        visualViewport.addEventListener("resize", () => {
-          updateViewportHeight();
-          handleKeyboardState();
-        });
-      }
-
-      window.addEventListener("resize", () => {
-        updateViewportHeight();
-        handleKeyboardState();
-      });
-
-      // if (window.visualViewport) {
-      //   visualViewport.addEventListener("resize", handleKeyboardState);
+      //   document.documentElement.style.setProperty(
+      //     "--vh",
+      //     `${height * 0.01}px`,
+      //   );
       // }
 
-      // window.addEventListener("resize", handleKeyboardState);
+      // updateViewportHeight();
+      // handleKeyboardState();
+
+      // if (window.visualViewport) {
+      //   visualViewport.addEventListener("resize", () => {
+      //     updateViewportHeight();
+      //     handleKeyboardState();
+      //   });
+      // }
+
+      // window.addEventListener("resize", () => {
+      //   updateViewportHeight();
+      //   handleKeyboardState();
+      // });
+
+      if (window.visualViewport) {
+        visualViewport.addEventListener("resize", handleKeyboardState);
+      }
+
+      window.addEventListener("resize", handleKeyboardState);
     </script>
 
     <script>
