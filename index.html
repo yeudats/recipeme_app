@@ -47,8 +47,8 @@
         position: fixed;
         top: 0;
         left: 0;
-        /* min-height: 100dvh; */
-        height: 100%;
+        min-height: 100dvh;
+        /* height: 100%; */
         overflow-x: hidden;
         overflow-y: auto;
         /* overscroll-behavior: none; */
@@ -1195,24 +1195,41 @@
       //   });
       // }
 
-      let keyboardOpen = false;
+
 
       function handleKeyboardState() {
-        const viewportHeight = window.visualViewport
-          ? window.visualViewport.height
-          : window.innerHeight;
+  if (!window.visualViewport) return;
 
-        // const fullHeight = window.screen.height;
-        const fullHeight = document.documentElement.clientHeight;
+  const activeView = document.querySelector(".view.active");
+  if (activeView) {
+    // משנים את הגובה של הדף הנוכחי שיהיה בדיוק בגובה הפנוי מעל המקלדת
+    activeView.style.height = `${window.visualViewport.height}px`;
+  }
+}
 
-        const isKeyboardNowOpen = viewportHeight < fullHeight * 0.75;
+// הפעלת הפונקציה בכל שינוי גודל (פתיחה/סגירה של מקלדת)
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", handleKeyboardState);
+}
 
-        if (isKeyboardNowOpen !== keyboardOpen) {
-          keyboardOpen = isKeyboardNowOpen;
+      // let keyboardOpen = false;
 
-          document.body.classList.toggle("keyboard-open", keyboardOpen);
-        }
-      }
+      // function handleKeyboardState() {
+      //   const viewportHeight = window.visualViewport
+      //     ? window.visualViewport.height
+      //     : window.innerHeight;
+
+      //   // const fullHeight = window.screen.height;
+      //   const fullHeight = document.documentElement.clientHeight;
+
+      //   const isKeyboardNowOpen = viewportHeight < fullHeight * 0.75;
+
+      //   if (isKeyboardNowOpen !== keyboardOpen) {
+      //     keyboardOpen = isKeyboardNowOpen;
+
+      //     document.body.classList.toggle("keyboard-open", keyboardOpen);
+      //   }
+      // }
 
       // function updateViewportHeight() {
       //   const height = window.visualViewport
