@@ -48,7 +48,6 @@
         /* height: 100%; */
         overflow-x: hidden;
         overflow-y: hidden;
-        /* overscroll-behavior: none; */
         background: linear-gradient(
           135deg,
           #fef9c3 0%,
@@ -461,12 +460,10 @@
         align-items: center;
         position: fixed;
         inset: 0;
-        top: 0;
-        right: 0;
         pointer-events: none;
         overflow-x: hidden;
         overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
+        /* -webkit-overflow-scrolling: touch; */
       }
 
       .view.active {
@@ -1117,10 +1114,8 @@
       }
 
       function autoResize(el) {
-        // const prev = window.scrollY;
         el.style.height = "auto";
         el.style.height = el.scrollHeight + "px";
-        // window.scrollTo(0, prev);
       }
 
       document.addEventListener(
@@ -1256,11 +1251,11 @@ if (window.visualViewport) {
       //   handleKeyboardState();
       // });
 
-      if (window.visualViewport) {
-        visualViewport.addEventListener("resize", handleKeyboardState);
-      }
+      // if (window.visualViewport) {
+      //   visualViewport.addEventListener("resize", handleKeyboardState);
+      // }
 
-      window.addEventListener("resize", handleKeyboardState);
+      // window.addEventListener("resize", handleKeyboardState);
     </script>
 
     <script>
