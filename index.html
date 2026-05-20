@@ -47,7 +47,7 @@
         min-height: 100dvh;
         /* height: 100%; */
         overflow-x: hidden;
-        overflow-y: hidden;
+        overflow-y: auto;
         background: linear-gradient(
           135deg,
           #fef9c3 0%,
@@ -1190,20 +1190,20 @@
 
 
 
-      function handleKeyboardState() {
-  if (!window.visualViewport) return;
+//       function handleKeyboardState() {
+//   if (!window.visualViewport) return;
 
-  const activeView = document.querySelector(".view.active");
-  if (activeView) {
-    // משנים את הגובה של הדף הנוכחי שיהיה בדיוק בגובה הפנוי מעל המקלדת
-    activeView.style.height = `${window.visualViewport.height}px`;
-  }
-}
+//   const activeView = document.querySelector(".view.active");
+//   if (activeView) {
+//     // משנים את הגובה של הדף הנוכחי שיהיה בדיוק בגובה הפנוי מעל המקלדת
+//     activeView.style.height = `${window.visualViewport.height}px`;
+//   }
+// }
 
-// הפעלת הפונקציה בכל שינוי גודל (פתיחה/סגירה של מקלדת)
-if (window.visualViewport) {
-  window.visualViewport.addEventListener("resize", handleKeyboardState);
-}
+// // הפעלת הפונקציה בכל שינוי גודל (פתיחה/סגירה של מקלדת)
+// if (window.visualViewport) {
+//   window.visualViewport.addEventListener("resize", handleKeyboardState);
+// }
 
       // let keyboardOpen = false;
 
