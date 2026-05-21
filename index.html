@@ -136,6 +136,11 @@
         -webkit-tap-highlight-color: transparent;
       }
 
+      .delButton {
+        width: 48%;
+        margin: auto;
+      }
+      
       @media (hover: hover) and (pointer: fine) {
         .button:hover {
           transform: scale(1.02);
@@ -481,14 +486,14 @@
         <p>האם למחוק את המתכון לצמיתות?</p>
         <div style="display: flex; gap: 15px; margin-top: 20px">
           <button
-            class="button"
+            class="button delButton"
             style="background: #ef4444"
             id="confirm-delete-btn"
           >
             כן, מחק
           </button>
           <button
-            class="button"
+            class="button delButton"
             style="background: #94a3b8"
             onclick="closeDeleteModal()"
           >
