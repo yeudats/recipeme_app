@@ -44,7 +44,6 @@
       }
 
       html {
-        /* min-height: 100dvh; */
         min-height: 100%;
         overflow-anchor: none;
         overflow-x: hidden;
@@ -74,12 +73,9 @@
         background: transparent;
 
         width: 100%;
-        /* min-height: 100%; */
-        /* height: 100%; */
         overflow-anchor: none;
         overflow-x: hidden;
         overflow-y: auto;
-        /* overscroll-behavior-y: contain; */
         -webkit-overflow-scrolling: touch;
       }
 
@@ -87,8 +83,6 @@
         display: none;
         opacity: 0;
         width: 100%;
-        /* min-height: 100%; */
-        /* height: 100%; */
         box-sizing: border-box;
         transition: opacity 0.25s ease;
         flex-direction: column;
@@ -114,7 +108,6 @@
         padding: 1.5rem;
         padding-bottom: 2rem;
         background-color: var(--container-bg);
-        /* backdrop-filter: blur(8px); */
         border-radius: 1.2rem;
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
         border: 1px solid rgba(255, 255, 255, 0.5);
@@ -148,16 +141,16 @@
           transform: scale(1.02);
           box-shadow: 0 4px 12px rgba(253, 160, 133, 0.4);
         }
+      }
 
-        .button:focus {
-          transform: scale(0.98);
-          box-shadow: 0 4px 12px rgba(253, 160, 133, 0.4);
-        }
+      .button:focus {
+        transform: scale(0.98);
+        box-shadow: 0 4px 12px rgba(253, 160, 133, 0.4);
       }
 
       .input {
-        height: 55px;
         min-height: 55px;
+        height: 55px;
         padding-right: 1rem;
         padding-left: 1rem;
         align-content: center;
@@ -170,6 +163,8 @@
         border-radius: 0.75rem;
         font-size: 16px;
         line-height: 1.6;
+        padding-right: 1rem;
+        padding-left: 1rem;
         resize: none;
         overflow: hidden;
         overflow-anchor: none;
@@ -183,16 +178,19 @@
         font-family: inherit;
       }
 
+      .textarea {
+        min-height: 120px;
+        padding: 0.75rem 1rem;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+
       .input:focus,
       .textarea:focus {
         border-color: var(--blue-accent);
         background: #f0f9ff;
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
-      }
-
-      .textarea {
-        min-height: 120px;
-        padding: 0.75rem 1rem;
       }
 
       .readonly-box {
@@ -344,7 +342,7 @@
       .marquee-text {
         display: inline-block;
         white-space: nowrap;
-        animation: marquee-infinite 15s linear infinite;
+        animation: marquee-infinite 40s linear infinite;
         will-change: transform;
       }
 
@@ -523,10 +521,7 @@
           id="search-input"
           class="input search-input"
           placeholder="חפש מתכון..."
-          oninput="
-            autoResize(this)
-            // keepCaretVisible(this);
-          "
+          oninput=" autoResize(this) "
           autocomplete="off"
           autocorrect="off"
           autocapitalize="off"
@@ -773,38 +768,44 @@
         isEditMode = true;
         const recipe = cachedRecipes.find((r) => r.name === currentRecipeName);
         if (!recipe) return;
-
+        
         document.getElementById("view-add-title").innerText = "עדכון מתכון";
+        
         const nameInput = document.getElementById("recipe-name");
         nameInput.value = recipe.name;
         nameInput.readOnly = true;
         nameInput.classList.add("readonly-box"); // משחיר את הרקע קצת
-
-        document.getElementById("recipe-method").value = recipe.method;
+        
         groceryList = [...recipe.ingredients, ""];
         renderIngredients();
 
+        document.getElementById("recipe-method").value = recipe.method;
+        
         navigateTo("view-add", true);
+
         // תיקון הגובה: נמתין שהדף יוצג ואז נחשב גובה
         setTimeout(() => {
-          const methodInput = document.getElementById("recipe-method");
-          autoResize(methodInput);
+          document.getElementsByTagName("textarea").forEach((ta) => autoResize(ta));
         }, 350);
       }
 
       // חזרה למצב הוספה רגיל
       function resetAddForm() {
         isEditMode = false;
+
         document.getElementById("view-add-title").innerText = "הוספת מתכון חדש";
+        
         const nameInput = document.getElementById("recipe-name");
         nameInput.value = "";
+        nameInput.style.height = "auto";
         nameInput.readOnly = false;
         nameInput.classList.remove("readonly-box");
 
-        document.getElementById("recipe-method").value = "";
-        document.getElementById("recipe-method").style.height = "auto";
         groceryList = [""];
         renderIngredients();
+
+        document.getElementById("recipe-method").value = "";
+        document.getElementById("recipe-method").style.height = "auto";
       }
 
       function switchViewElement(viewId) {
@@ -1025,12 +1026,6 @@
         groceryList.forEach((item, index) => {
           createIngredientInput(index, item);
         });
-
-        // requestAnimationFrame(() => {
-        //   document.querySelectorAll(".ing-input").forEach((el) => {
-        //     autoResize(el);
-        //   });
-        // });
       }
 
       function createIngredientInput(index, value) {
@@ -1058,7 +1053,6 @@
           groceryList[currentIndex] = e.target.value;
 
           autoResize(e.target);
-          // keepCaretVisible(e.target);
 
           if (
             currentIndex === groceryList.length - 1 &&
