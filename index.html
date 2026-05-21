@@ -785,7 +785,13 @@
 
         // תיקון הגובה: נמתין שהדף יוצג ואז נחשב גובה
         setTimeout(() => {
-          document.getElementsByTagName("textarea").forEach((ta) => autoResize(ta));
+          autoResize(nameInput);
+
+          document.querySelectorAll(".ing-input").forEach((input) => {
+            autoResize(input);
+          });
+
+          autoResize(document.getElementById("recipe-method"));
         }, 350);
       }
 
