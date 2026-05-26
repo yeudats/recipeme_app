@@ -140,7 +140,7 @@
         width: 48%;
         margin: auto;
       }
-      
+
       @media (hover: hover) and (pointer: fine) {
         .button:hover {
           transform: scale(1.02);
@@ -537,9 +537,9 @@
           class="button search-button"
           onclick="
             searchRecipesLocal(document.getElementById('search-input').value);
-            setTimeout(() => {
-              document.getElementById('search-input').value = '';
-            }, 750);
+            // setTimeout(() => {
+            //   document.getElementById('search-input').value = '';
+            // }, 750);
           "
         >
           🔍
@@ -701,7 +701,7 @@
             if (e.key === "Enter") {
               e.preventDefault();
               searchRecipesLocal(searchInput.value);
-              searchInput.value = "";
+              // searchInput.value = "";
             }
           });
         }
@@ -893,7 +893,8 @@
         list.innerHTML = "";
 
         if (results.length === 0) {
-          list.innerHTML = "<p style='color: #64748b;'>לא נמצאו מתכונים</p>";
+          list.innerHTML = "<p style='color: #64748b; display: flex; align-items: center; justify-content: center; text-decoration: none;'>לא נמצאו מתכונים</p>";
+          showToast("לא נמצאו מתכונים");
         } else {
           results.forEach((recipe) => {
             const b = document.createElement("button");
@@ -909,8 +910,11 @@
             };
             list.appendChild(b);
           });
+          navigateTo("view-search", false);
+          if (document.getElementById("search-input")) {
+            document.getElementById("search-input").value = "";
+          }
         }
-        navigateTo("view-search", false);
       }
 
       function renderRecipeData(recipe) {
