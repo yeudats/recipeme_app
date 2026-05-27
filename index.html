@@ -15,7 +15,7 @@
     <link rel="apple-touch-icon" href="icon.png" />
     <link rel="manifest" href="manifest.json" />
 
-    <title>Recipeme!</title>
+    <title>Recipeme</title>
     <style>
       * {
         -webkit-touch-callout: none;
@@ -45,6 +45,7 @@
 
       html {
         min-height: 100%;
+        min-height: 100dvh;
         overflow-anchor: none;
         overflow-x: hidden;
         overflow-y: auto;
@@ -537,9 +538,6 @@
           class="button search-button"
           onclick="
             searchRecipesLocal(document.getElementById('search-input').value);
-            // setTimeout(() => {
-            //   document.getElementById('search-input').value = '';
-            // }, 750);
           "
         >
           🔍
